@@ -1,0 +1,14 @@
+spring:
+  thymeleaf:
+    mode: HTML
+    suffix: .html
+    encoding: UTF-8
+    cache: false
+  devtools:
+    restart:
+      additional-paths:
+        - src/main/java
+server:
+  port: 8080
+logging:
+  config: classpath:log4j2.xml

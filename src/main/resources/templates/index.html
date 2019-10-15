@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <title>Spring测试</title>
+</head>
+
+<body style="padding-top: 70px;">
+  <!--<div th:replace="nav::nav"></div>-->
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-12">
+        <legend>Spring</legend>
+        <div><span th:text="${message}">xxx</span></div>
+        <div>
+          <button onclick="ajax()">ajax</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/jquery.min.js" charset="utf-8"></script>
+  <script src="/js/bootstrap.min.js" charset="utf-8"></script>
+  <script type="text/javascript">
+      function ajax()
+      {
+         $.ajax({
+            type: "get",  // 请求方式
+            url: "/test/errorAjax",  // 目标资源
+            dataType: "json",  // 服务器响应的数据类型
+            success : function (data) {
+                alert(data.msg);
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown){
+                alert(textStatus);
+              }
+              });
+      }
+  </script>
+</body>
+
+</html>

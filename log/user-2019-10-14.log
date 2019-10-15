@@ -1,0 +1,23 @@
+2019-10-14 11:10:57.635 [main] INFO  org.hackthon.letsdinner.LetsdinnerApplication - Application starting...
+2019-10-14 11:10:58.52 [restartedMain] INFO  org.hackthon.letsdinner.LetsdinnerApplication - Application starting...
+2019-10-14 11:10:59.54 [restartedMain] INFO  org.hackthon.letsdinner.LetsdinnerApplication - Starting LetsdinnerApplication on SUdeMacBook-Air.local with PID 656 (/Users/su/IdeaProjects/letsdinner/target/classes started by su in /Users/su/IdeaProjects/letsdinner)
+2019-10-14 11:10:59.58 [restartedMain] INFO  org.hackthon.letsdinner.LetsdinnerApplication - No active profile set, falling back to default profiles: default
+2019-10-14 11:10:59.164 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2019-10-14 11:10:59.164 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2019-10-14 11:11:2.125 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2019-10-14 11:11:2.166 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2019-10-14 11:11:2.213 [restartedMain] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2019-10-14 11:11:2.216 [restartedMain] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.26]
+2019-10-14 11:11:2.503 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2019-10-14 11:11:2.505 [restartedMain] INFO  org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 3340 ms
+2019-10-14 11:11:3.48 [restartedMain] INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+2019-10-14 11:11:3.252 [restartedMain] INFO  org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping - Adding welcome page template: index
+2019-10-14 11:11:3.769 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2019-10-14 11:11:4.207 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2019-10-14 11:11:4.258 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2019-10-14 11:11:4.264 [restartedMain] INFO  org.hackthon.letsdinner.LetsdinnerApplication - Started LetsdinnerApplication in 6.198 seconds (JVM running for 9.494)
+2019-10-14 11:11:4.269 [restartedMain] INFO  org.hackthon.letsdinner.LetsdinnerApplication - Application started.
+2019-10-14 11:11:7.50 [http-nio-8080-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-10-14 11:11:7.51 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2019-10-14 11:11:7.61 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 10 ms
+2019-10-14 11:11:18.665 [Thread-8] INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
