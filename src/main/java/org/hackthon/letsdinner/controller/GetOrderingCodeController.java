@@ -14,7 +14,7 @@ public class GetOrderingCodeController {
      * @param model 返回页面模型
      * @return 返回的页面名称，去除.html后缀
      */
-    @RequestMapping("/gerorderingcode")
+    @RequestMapping("/getorderingcode")
     public String index(HttpServletRequest request, Model model)
     {
         String param = request.getParameter("key");
