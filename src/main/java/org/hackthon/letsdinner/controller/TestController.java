@@ -24,6 +24,7 @@ public class TestController
     @RequestMapping("/index")
     public String index(HttpServletRequest request, Model model)
     {
+        //注释
         String param = request.getParameter("param");
         model.addAttribute("message", param);
         return "index";
