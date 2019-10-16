@@ -5,12 +5,14 @@
 }
 
 .qrcodeTitle{
-    display: inline-block;
-    font-size: 20px;
+    text-align: center;
+    margin-top: 16px;
+    height: 50px;
+    font-size: 24px;
+    color: #ffffff;
 }
 
 .qrcodeFieldDiv{
-    margin-top: 50px;
     margin-left: 10px;
     margin-right: 10px;
     background: #ffffff;
@@ -18,14 +20,19 @@
     border-radius: 5px;
 }
 
+.qrcodeTips{
+    padding: 4px;
+    font-size: 24px;
+    text-align: left;
+    color: #8CA0BA;
+    background: #f0f0f0;
+}
+
 .qrcodeDiv{
     text-align: center;
 }
 
-
-
 .qrcode{
-    margin-top: 50px;
     display: inline-block;
     height: 200px;
     width: 200px;
