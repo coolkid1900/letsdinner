@@ -29,10 +29,11 @@ public class GetQrCodeController {
     @RequestMapping("/getqrcode")
     public String getqrcode(HttpServletRequest request, Model model)
     {
-        String test="12";
-        String qrcodeUrl = getUrl() + "/getorderingcode?key=" + test;
-        System.out.println(qrcodeUrl);
+        String key = "12";
+        String uid = "80234530";
+        String qrcodeUrl = getUrl() + "/scanqrcode?key=" + key;
         model.addAttribute("qrcodeUrl", qrcodeUrl);
+        model.addAttribute("uid",uid);
         return "getQrMainPage";
     }
 }

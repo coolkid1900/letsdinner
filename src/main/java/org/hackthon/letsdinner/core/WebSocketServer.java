@@ -40,11 +40,6 @@ public class WebSocketServer {
         addOnlineCount();           //在线数加1
         log.info("有新窗口开始监听:"+sid+",当前在线人数为" + getOnlineCount());
         this.sid=sid;
-        try {
-            sendMessage("连接成功");
-        } catch (IOException e) {
-            log.error("websocket IO异常");
-        }
     }
 
     /**

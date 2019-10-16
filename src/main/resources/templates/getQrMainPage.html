@@ -11,14 +11,76 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/qrcode.css">
 </head>
-<body>
-    <div id="qrcode" style="width:200px; height:200px;" class="qrcode"></div>
+<body class="qrcodeMain">
+    <div class="qrcodeTitle">取餐码</div>>
+    <div class="qrcodeFieldDiv">
+        <div class="qrcodeDiv">
+            <div id="qrcode" class="qrcode"></div>
+        </div>
+        <div class="messageDiv">
+            <span id="message" class="message"></span>
+        </div>
+    </div>
     <script th:inline="javascript">
         jQuery('#qrcode').qrcode({
             text:[[${qrcodeUrl}]],
             width:200,
             height:200
-    });
+        });
+        var websocket = null;
+        var websocketUrl = "ws://localhost:8080/websocket/"+[[${uid}]];
+        //判断当前浏览器是否支持WebSocket
+        if (!('WebSocket' in window)) {
+            alert('Not support websocket')
+        } else {
+            websocket = new WebSocket(websocketUrl);
+        }
+
+        //连接发生错误的回调方法
+        websocket.onerror = function(){
+            console.log("连接发生错误");
+        };
+
+        //连接成功建立的回调方法
+        websocket.onopen = function(event){
+            console.log("连接建立成功");
+        };
+
+        //接收到消息的回调方法
+        websocket.onmessage = function(event){
+            setMessageInnerHTML(event.data);
+        };
+
+        //连接关闭的回调方法
+        websocket.onclose = function(){
+            console.log("连接关闭");
+        };
+
+        //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+        window.onbeforeunload = function(){
+            websocket.close();
+        };
+
+        //将消息显示在网页上
+        function setMessageInnerHTML(message){
+            try{
+                if (message.substr(0,1) === "B"){
+                    $("#message").text(message.substr(1,1));
+                }else if (message.substr(0,1) === "C"){
+                    $("#message").text("尽情用餐吧");
+                }
+            }catch (e) {
+                alert("出错啦");
+            }
+
+
+        }
+
+        //关闭连接
+        function closeWebSocket(){
+            websocket.close();
+        }
+
     </script>
 </body>
 </html>
