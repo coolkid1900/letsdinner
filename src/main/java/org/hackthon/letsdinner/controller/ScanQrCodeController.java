@@ -20,23 +20,30 @@ public class ScanQrCodeController {
     public void scanqrcode(HttpServletRequest request, Model model)
     {
         String key = request.getParameter("key");
-        String message = "";
-        String status = "B";
-        int orderingCode = 4;
-        if (scanNums == 1){
-            message = status + orderingCode;
-        }else if (scanNums == 2){
+        String message;
+        String orderNum;
+        if (getOrderStatusByKey(key).equals("A")){
+            orderNum = getValidOrderNumByKey(key);
+            message = "B" + orderNum;
+        }else{
             message = "C";
         }
-        String userId = "80234530";
         try {
-            WebSocketServer.sendInfo(message,userId);
-            scanNums++;
-            if (scanNums == 3){
-                scanNums = 1;
-            }
+            WebSocketServer.sendInfo(message,key);
         } catch (IOException e) {
-            logger.error(userId+"#"+e.getMessage());
+            logger.error(key+"#"+e.getMessage());
         }
+    }
+
+    private String getOrderStatusByKey(String key) {
+        String orderStatus;
+        orderStatus = "A";
+        return orderStatus;
+    }
+
+    private String getValidOrderNumByKey(String key) {
+        String orderNum;
+        orderNum ="4";
+        return orderNum;
     }
 }

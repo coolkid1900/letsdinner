@@ -6,30 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/qrcode.js"></script>
-    <script type="text/javascript" src="/js/jquery.qrcode.js"></script>
+    <script type="text/javascript" src="/js/jquery.qrcode.min.js"></script>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/qrcode.css">
 </head>
 <body class="qrcodeMain">
     <div class="qrcodeTitle">取餐码</div>
     <div class="qrcodeFieldDiv">
-        <div class="qrcodeTips">向餐厅入口出示</div>
+        <div id="qrcodeTips" class="qrcodeTips">请向取餐入口出示</div>
         <div class="qrcodeDiv">
             <div id="qrcode" class="qrcode"></div>
         </div>
         <div class="messageDiv">
-            <span id="message" class="message"></span>
+            <span id="message" class="message">请排队</span>
         </div>
     </div>
     <script th:inline="javascript">
         jQuery('#qrcode').qrcode({
             text:[[${qrcodeUrl}]],
             width:200,
-            height:200
+            height:200,
+            correctLevel:0
+
         });
         var websocket = null;
-        var websocketUrl = "ws://localhost:8080/websocket/"+[[${uid}]];
+        var websocketUrl = [[${websocketUrl}]];
         //判断当前浏览器是否支持WebSocket
         if (!('WebSocket' in window)) {
             alert('Not support websocket')
@@ -66,15 +67,14 @@
         function setMessageInnerHTML(message){
             try{
                 if (message.substr(0,1) === "B"){
-                    $("#message").text(message.substr(1,1));
+                    $("#qrcodeTips").text("请向取餐出口出示");
+                    $("#message").text("取餐号:"+message.substr(1,1));
                 }else if (message.substr(0,1) === "C"){
-                    $("#message").text("尽情用餐吧");
+                    $("#message").text("请用餐");
                 }
             }catch (e) {
                 alert("出错啦");
             }
-
-
         }
 
         //关闭连接
@@ -82,6 +82,19 @@
             websocket.close();
         }
 
+        var hiddenTime;
+        document.addEventListener('visibilitychange',function() {
+            if(document.visibilityState === 'hidden') {
+                hiddenTime = new Date().getTime()	//记录页面隐藏时间
+            }else{
+                var visibleTime = new Date().getTime();
+                if((visibleTime-hiddenTime)/1000>5){	//页面再次可见的时间-隐藏时间>5S,重连
+                    setTimeout(function(){
+                        websocket = new WebSocket(websocketUrl);
+                    },500);    //0.5S后重连
+                }
+            }
+        });
     </script>
 </body>
 </html>
