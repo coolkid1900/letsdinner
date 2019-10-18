@@ -1,19 +1,15 @@
 package org.hackthon.letsdinner.controller;
 
 import net.sf.json.JSONArray;
-import org.hackthon.letsdinner.core.BusinessException;
-import org.hackthon.letsdinner.model.AjaxObject;
 import org.hackthon.letsdinner.model.CurrentEater;
-import org.hackthon.letsdinner.model.Food;
+import org.hackthon.letsdinner.model.RestaurantFood;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.util.*;
 
 @Controller
@@ -29,22 +25,22 @@ public class CurrentMenuShowController {
     public void queryCurrentUsers(HttpServletResponse resp){
         try
         {
-            Food f1 = new Food("../images/ky.jpg","烤鸭");
-            Food f2 = new Food("../images/sgcjd.jpg","丝瓜炒鸡蛋");
-            ArrayList<Food> alFood = new ArrayList<Food>();
-            alFood.add(f1);
-            alFood.add(f2);
+            RestaurantFood f1 = new RestaurantFood("../images/ky.jpg","烤鸭");
+            RestaurantFood f2 = new RestaurantFood("../images/sgcjd.jpg","丝瓜炒鸡蛋");
+            ArrayList<RestaurantFood> alRestaurantFood = new ArrayList<RestaurantFood>();
+            alRestaurantFood.add(f1);
+            alRestaurantFood.add(f2);
             //测试数据
-            CurrentEater eateUser1 = new CurrentEater(1,alFood);
-            CurrentEater eateUser2 = new CurrentEater(2,alFood);
-            CurrentEater eateUser3 = new CurrentEater(3,alFood);
-            CurrentEater eateUser4 = new CurrentEater(4,alFood);
-            CurrentEater eateUser5 = new CurrentEater(5,alFood);
-            CurrentEater eateUser6 = new CurrentEater(6,alFood);
-            CurrentEater eateUser7 = new CurrentEater(7,alFood);
-            CurrentEater eateUser8 = new CurrentEater(8,alFood);
-            CurrentEater eateUser9 = new CurrentEater(9,alFood);
-            CurrentEater eateUser10 = new CurrentEater(10,alFood);
+            CurrentEater eateUser1 = new CurrentEater(1, alRestaurantFood);
+            CurrentEater eateUser2 = new CurrentEater(2, alRestaurantFood);
+            CurrentEater eateUser3 = new CurrentEater(3, alRestaurantFood);
+            CurrentEater eateUser4 = new CurrentEater(4, alRestaurantFood);
+            CurrentEater eateUser5 = new CurrentEater(5, alRestaurantFood);
+            CurrentEater eateUser6 = new CurrentEater(6, alRestaurantFood);
+            CurrentEater eateUser7 = new CurrentEater(7, alRestaurantFood);
+            CurrentEater eateUser8 = new CurrentEater(8, alRestaurantFood);
+            CurrentEater eateUser9 = new CurrentEater(9, alRestaurantFood);
+            CurrentEater eateUser10 = new CurrentEater(10, alRestaurantFood);
             ArrayList<CurrentEater> currentEaters = new ArrayList<CurrentEater>();
             currentEaters.add(eateUser1);
             currentEaters.add(eateUser2);
