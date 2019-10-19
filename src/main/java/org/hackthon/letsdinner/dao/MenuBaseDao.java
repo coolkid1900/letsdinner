@@ -5,16 +5,19 @@ import org.hackthon.letsdinner.utils.BaseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
 public class MenuBaseDao
 {
-    private Logger logger = LoggerFactory.getLogger(MenuDayDao.class);
+    private Logger logger = LoggerFactory.getLogger(MenuBaseDao.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
     /**
@@ -22,8 +25,31 @@ public class MenuBaseDao
      * @param menuIds
      * @return
      */
-    public String deleteFromMenu(List<Integer> menuIds)
+    public String deleteFromMenu(final List<Integer> menuIds)
     {
+        String sql = "delete from menu_base where id=?";
+        try
+        {
+            jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter()
+            {
+                @Override
+                public void setValues(PreparedStatement preparedStatement, int i) throws SQLException
+                {
+                    preparedStatement.setInt(1, menuIds.get(i));
+                }
+
+                @Override
+                public int getBatchSize()
+                {
+                    return menuIds.size();
+                }
+            });
+        }
+        catch (Exception exp)
+        {
+            logger.error("删除菜品失败. Exp: {}", exp.getMessage());
+            return AjaxObject.error("删除菜品失败").toString();
+        }
         return BaseUtils.toResultJson(new Object());
     }
 
@@ -36,6 +62,16 @@ public class MenuBaseDao
      */
     public String addDishToMenu(String name, BigDecimal price, String image)
     {
+        String sql = "insert into menu_base(name, image, price) values(?,?,?)";
+        try
+        {
+            jdbcTemplate.update(sql, name, image, price);
+        }
+        catch (Exception exp)
+        {
+            logger.error("增加菜品失败. Exp: {}", exp.getMessage());
+            return AjaxObject.error("增加菜品失败").toString();
+        }
         return BaseUtils.toResultJson(new Object());
     }
 }

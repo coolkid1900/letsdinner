@@ -1,7 +1,7 @@
 .cap {
-    text-align:center;
-    font-size:large;
-    color:black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .capImg {

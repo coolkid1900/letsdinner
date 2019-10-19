@@ -5,6 +5,8 @@ package org.hackthon.letsdinner.model;
  */
 public class MenuOne
 {
+    private int id;
+
     private String uid;
 
     private String menuIds;
@@ -14,6 +16,16 @@ public class MenuOne
     private String currentDate;
 
     private String period;
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
 
     public String getUid()
     {

@@ -3,6 +3,8 @@ package org.hackthon.letsdinner.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.hackthon.letsdinner.dao.MenuDayDao;
+import org.hackthon.letsdinner.dao.MenuOneDao;
 import org.hackthon.letsdinner.model.FoodBean;
 import org.hackthon.letsdinner.model.SelectBean;
 import org.hackthon.letsdinner.utils.PeriodUtil;
@@ -18,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class UserMenuController {
@@ -51,9 +52,10 @@ public class UserMenuController {
             return "error";
         }
         // 根据日期和用餐类型获取菜品信息
-        // String foodListStr = MenuDayDao.getMenu(date, mealTime);
+        MenuDayDao mdd = new MenuDayDao();
+        String foodListStr = mdd.getDayMenu(date, mealTime);
 
-        // 调试代码
+        /*// 调试代码
         String foodListStr = "";
         String encoding = "UTF-8";
         File file = new File("D:\\fsq\\test.txt");
@@ -74,7 +76,7 @@ public class UserMenuController {
             System.err.println("The OS does not support " + encoding);
             e.printStackTrace();
             return null;
-        }
+        }*/
 
         // json解析
         JSONObject foodListJson = JSONObject.parseObject(foodListStr);
@@ -126,13 +128,14 @@ public class UserMenuController {
         String uniqueID = System.currentTimeMillis() + userID;
 
         //将用户选择的菜单存入数据库
-        //String saveMsg = MenuOneDao.addOneMenu(userID, foodMap, uniqueID, date, period);
-        String saveMsg = "{\n" +
+        MenuOneDao mod = new MenuOneDao();
+        String saveMsg = mod.addOneMenu(userID, foodMap, uniqueID, date, period);
+        /*String saveMsg = "{\n" +
                 "    \"code\": 0,\n" +
                 "    \"message\":\"\",\n" +
                 "    \"data\": {\n" +
                 "    }\n" +
-                "  }";
+                "  }";*/
         JSONObject foodListJson = JSONObject.parseObject(saveMsg);
         Integer statusCode = foodListJson.getInteger("code");
         JSONObject returnJson = new JSONObject();

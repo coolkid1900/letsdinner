@@ -13,13 +13,13 @@
 <body>
 
 <div class="list-group">
-  <div class="row list-group-item">
-    <caption class="cap">
-      <div class="blu">
-        <img src="../images/main.png" class="capImg" />
-        LetsDinner | 选餐
-      </div>
-    </caption>
+  <div class="row list-group-item cap">
+    <div class="col-xs-3 col-sm-3">
+      <img src="../images/main.png" class="capImg" />
+    </div>
+    <div class="col-xs-9 col-sm-9 blu" >
+      LetsDinner | 选餐
+    </div>
   </div>
 
   <input id="userID" type="hidden" th:value="${userID}" />
