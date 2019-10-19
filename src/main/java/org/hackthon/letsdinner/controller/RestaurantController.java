@@ -1,8 +1,7 @@
 package org.hackthon.letsdinner.controller;
 
-import org.hackthon.letsdinner.LetsdinnerApplication;
-import org.hackthon.letsdinner.core.BusinessException;
 import org.hackthon.letsdinner.model.AjaxObject;
+import org.hackthon.letsdinner.model.cookBean;
 import org.hackthon.letsdinner.utils.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
@@ -148,10 +147,3 @@ public class RestaurantController {
 
 }
 
-class cookBean
-{
-    public String id;
-    public String name;
-    public String price;
-    public String image;
-}
