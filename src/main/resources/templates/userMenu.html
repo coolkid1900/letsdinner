@@ -7,34 +7,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/userMenu.css">
-  <title>请选菜</title>
+  <title>选餐中心</title>
 </head>
 
 <body>
 
 <div class="list-group">
-  <div class="list-group-item">
-    <caption class="cap">
-      <div class="blu">
-        <img src="../images/main.png" class="capImg" />
-        LetsDinner | 配餐
-      </div>
-    </caption>
+  <div class="row list-group-item cap">
+    <img src="../images/main_white.png" style="width: 80px; height: 80px; margin-right: 10px;" />
+    LetsDinner | 选餐
+    <!--<div class="col-xs-3 col-sm-3">
+      <img src="../images/main.png" class="capImg" />
+    </div>
+    <div class="col-xs-9 col-sm-9 blu" >
+      LetsDinner | 选餐
+    </div>-->
   </div>
 
   <input id="userID" type="hidden" th:value="${userID}" />
-  <div class="row list-group-item everyRow" th:each="food : ${menu}">
+  <div class="row list-group-item" th:each="food : ${menu}">
 
-    <div class="col-xs-4 col-sm-4"><img src="../images/1.jpg" class="capImg" /></div>
+    <div class="col-xs-4 col-sm-4" style="text-align: center;">
+      <img th:src="'data:image/jpeg;base64,' + ${food.image}" class="capImg" />
+    </div>
 
-    <div class="col-xs-6 col-sm-6" >
-      <div hight="50%" th:text="${food.foodName}"></div>
+    <div class="col-xs-4 col-sm-4" >
+      <div hight="50%" th:text="${food.name}"></div>
       <div hight="50%" th:text="'￥' + ${food.price}"></div>
     </div>
 
-    <div class="col-xs-2 col-sm-2">
-      <span class="glyphicon glyphicon-minus-sign btnDel blu" aria-hidden="true" th:onclick="delFood([[${food.foodId}]], [[${food.foodName}]], [[${food.price}]]);"></span>
-      <span class="glyphicon glyphicon-plus-sign btnAdd blu" aria-hidden="true" th:onclick="addFood([[${food.foodId}]], [[${food.foodName}]], [[${food.price}]]);"></span>
+    <div class="col-xs-4 col-sm-4">
+      <span th:id="'minus' + ${food.id}" class="glyphicon glyphicon-minus-sign vMiddle gray" aria-hidden="true" th:onclick="delFood([[${food.id}]], [[${food.name}]], [[${food.price}]]);"></span>
+        &nbsp;<span class="vMiddle" th:id="'num' + ${food.id}">0</span>&nbsp;
+      <span class="glyphicon glyphicon-plus-sign vMiddle blu" aria-hidden="true" th:onclick="addFood([[${food.id}]], [[${food.name}]], [[${food.price}]]);"></span>
     </div>
 
   </div>
@@ -42,8 +47,8 @@
 </div>
 <div style="padding-bottom:50px"></div>
 <div class="footer">
-  <div class="status"><span>已选<span id="foodNum">0</span>个菜，共￥</span><span id="totalPrice">0</span></div>
-  <button type="button" class="comBtn" onclick="commitFood()">选好了</button>
+  <div class="status"><span>已选<span id="foodNum">0</span>个菜品，共￥</span><span id="totalPrice">0</span></div>
+  <button type="button" class="comBtn" th:onclick="commitFood([[${date}]], [[${period}]])">选好了</button>
 </div>
 
 <script src="/js/jquery.min.js" charset="utf-8"></script>
@@ -69,7 +74,13 @@
     {
       foodMap2[foodId] = 1;
       foodNum++;
+      $("#minus" + foodId).removeClass("gray");
+      $("#minus" + foodId).addClass("blu");
     }
+    // 增加显示数量
+    var fid = "#num" + foodId;
+    var cuNum = parseInt($(fid).html());
+    $(fid).html(cuNum + 1);
     totalPrice += price;
     $("#foodNum").html(foodNum);
     $("#totalPrice").html(totalPrice);
@@ -78,13 +89,17 @@
   // 减菜
   function delFood(foodId, foodName, price)
   {
-    // 计算菜的数量
+    // 计算菜品的数量
     if (foodMap2[foodId] > 0)
     {
+      var fid = "#num" + foodId;
+      $(fid).html(foodMap2[foodId] - 1);
       foodMap2[foodId]--;
       if (foodMap2[foodId] === 0 && foodNum > 0)
       {
         foodNum--;
+        $("#minus" + foodId).removeClass("blu");
+        $("#minus" + foodId).addClass("gray");
       }
       totalPrice -= price;
       $("#foodNum").html(foodNum);
@@ -92,14 +107,14 @@
     }
     else
     {
-      swal({
-        text: "您前并未选择此菜!",
-      });
+      //swal({
+      //  text: "您当前并未选择此菜品!",
+      //});
       return;
     }
   }
 
-  function commitFood()
+  function commitFood(date, period)
   {
     var tipStr = "";
     var params = [];
@@ -109,13 +124,13 @@
       if (valueNum > 0)
       {
         tipStr += "\n" + foodMap1[key] + ": " + valueNum + "份";
-        params.push({"key":key,"num":valueNum});
+        params.push({"id":key,"num":valueNum});
       }
     }
     if (tipStr === "")
     {
       swal({
-        text: "您尚未选择任何菜!",
+        text: "您尚未选择任何菜品!",
       });
       return;
     }
@@ -123,7 +138,7 @@
     tipStr = "您已选择如下菜品：\n" + tipStr;
 
     var userID = $("#userID").val();
-    var sendStr = "sendJson={'userID':'" + userID + "','foodJson':'" + JSON.stringify(params) + "'}";
+    var sendStr = "date=" + date + "&period=" + period + "&foodJson={'userID':'" + userID + "','foodJson':'" + JSON.stringify(params) + "'}";
     swal(tipStr, {
       buttons: {
         cancel: "取消",
@@ -143,10 +158,24 @@
             data: sendStr,
             async: false,
             success: function (result) {
-                swal({
-                  text: "即将生成二维码！",
+              if (result.code === 0)
+              {
+                swal("即将生成二维码！", {
+                    buttons: {
+                    catch: {
+                      text: "OK",
+                    },
+                  },
+                })
+                .then((value) => {
+                  window.location.href="/getqrcode?key=" + result.uniqueID;
                 });
-                window.location.href="/getqrcode?userID=" + result.uniqueID;
+              }
+              else {
+                swal({
+                  text: "提交选菜列表失败，请重试！",
+                });
+              }
             }, error: function () {
                 swal({
                   text: "服务器异常！",

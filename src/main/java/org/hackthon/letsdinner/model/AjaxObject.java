@@ -1,5 +1,6 @@
 package org.hackthon.letsdinner.model;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.httpclient.HttpStatus;
 
 import java.util.HashMap;
@@ -40,6 +41,13 @@ public class AjaxObject extends HashMap<String, Object>
         return r;
     }
 
+    public static AjaxObject ok(Object value)
+    {
+        AjaxObject r = new AjaxObject();
+        r.put("data", value);
+        return r;
+    }
+
     public static AjaxObject ok() {
         return new AjaxObject();
     }
@@ -56,5 +64,10 @@ public class AjaxObject extends HashMap<String, Object>
 
     public static AjaxObject apiError(String msg) {
         return error(1, msg);
+    }
+
+    public String toString()
+    {
+        return JSON.toJSONString(this);
     }
 }

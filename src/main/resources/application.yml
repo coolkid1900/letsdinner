@@ -8,6 +8,11 @@ spring:
     restart:
       additional-paths:
         - src/main/java
+  datasource:
+    url: jdbc:sqlite:///Users/lin/IdeaProjects/letsdinner/dinner.db
+    username:
+    password:
+    driver-class-name: org.sqlite.JDBC
 server:
   port: 8080
 logging:
