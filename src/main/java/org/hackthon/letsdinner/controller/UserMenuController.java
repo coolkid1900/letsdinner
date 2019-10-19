@@ -92,7 +92,7 @@ public class UserMenuController {
             }
         }
         else {
-            return "error";
+            return "errorNew";
         }
 
         model.addAttribute("menu", menu);
