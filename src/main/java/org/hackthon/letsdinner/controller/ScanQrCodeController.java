@@ -41,8 +41,8 @@ public class ScanQrCodeController {
 
         if (getOrderStatusByKey(key).equals(STATUS_DEFAULT)){
             if (setOrderStatus(key,STATUS_IN)){
-                String orderNum = getValidOrderNumByKey(key);
-                if (!orderNum.equals("")){
+                int orderNum = getValidOrderNumByKey(key);
+                if (orderNum != -1){
                     pushMessage.setStatus(STATUS_IN);
                     pushMessage.setMessage("取餐号:"+orderNum);
                 }else {
@@ -78,14 +78,18 @@ public class ScanQrCodeController {
         return orderStatus.getStatus();
     }
 
-    private String getValidOrderNumByKey(String key) {
+    private int getValidOrderNumByKey(String key) {
         JsonResult jsonResult = BaseUtils.parseJson(takeProcessDao.takeOneDish(key));
         String orderNumJson = "";
         if (jsonResult.getCode() == 0){
             orderNumJson = jsonResult.getData().toJSONString();
         }
+        else if (jsonResult.getCode() == 404)
+        {
+            return -1;
+        }
         OrderNum orderNum = JSON.parseObject(orderNumJson, OrderNum.class);
-        return orderNum.getOrderNum();
+        return orderNum.getId();
     }
 
     private boolean setOrderStatus(String key, String status) {

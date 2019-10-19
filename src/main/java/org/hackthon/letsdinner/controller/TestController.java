@@ -37,14 +37,9 @@ public class TestController
         //注释
         String param = request.getParameter("param");
         //userDao.registerUser("xxxxxx", "名字", "123456");
-//        userDao.validateUser("xxxxxx", "123456");
-        System.out.println(menuDayDao.getDayMenu("2019-10-18", "D"));
+        userDao.validateUser("xxxxxx", "123456");
+        //System.out.println(menuDayDao.getDayMenu("2019-10-18", "D"));
 
-        String json = "{\"code\":0, \"message\":\"成功\",\"data\":[1,2,3]}";
-        JsonResult result = BaseUtils.parseJson(json);
-        System.out.println(result.getMessage());
-        JSONArray array = (JSONArray) result.getData();
-        System.out.println("大小" + array.size());
         model.addAttribute("message", param);
         return "index";
     }

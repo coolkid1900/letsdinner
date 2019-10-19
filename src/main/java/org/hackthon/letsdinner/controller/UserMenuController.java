@@ -8,6 +8,7 @@ import org.hackthon.letsdinner.dao.MenuOneDao;
 import org.hackthon.letsdinner.model.FoodBean;
 import org.hackthon.letsdinner.model.SelectBean;
 import org.hackthon.letsdinner.utils.PeriodUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,10 @@ import java.util.HashMap;
 
 @Controller
 public class UserMenuController {
+    @Autowired
+    private MenuDayDao mdd;
+    @Autowired
+    private MenuOneDao mod;
     /**
      * 用户菜单页面
      * @param request 请求数据对象
@@ -52,7 +57,6 @@ public class UserMenuController {
             return "error";
         }
         // 根据日期和用餐类型获取菜品信息
-        MenuDayDao mdd = new MenuDayDao();
         String foodListStr = mdd.getDayMenu(date, mealTime);
 
         /*// 调试代码
@@ -128,7 +132,6 @@ public class UserMenuController {
         String uniqueID = System.currentTimeMillis() + userID;
 
         //将用户选择的菜单存入数据库
-        MenuOneDao mod = new MenuOneDao();
         String saveMsg = mod.addOneMenu(userID, foodMap, uniqueID, date, period);
         /*String saveMsg = "{\n" +
                 "    \"code\": 0,\n" +

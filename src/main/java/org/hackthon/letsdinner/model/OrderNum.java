@@ -2,13 +2,15 @@ package org.hackthon.letsdinner.model;
 
 public class OrderNum {
 
-    private String orderNum;
+    private int id;
 
-    public String getOrderNum() {
-        return orderNum;
+    public int getId()
+    {
+        return id;
     }
 
-    public void setOrderNum(String orderNum) {
-        this.orderNum = orderNum;
+    public void setId(int id)
+    {
+        this.id = id;
     }
 }
