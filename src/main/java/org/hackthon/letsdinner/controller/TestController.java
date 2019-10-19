@@ -1,9 +1,12 @@
 package org.hackthon.letsdinner.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import org.hackthon.letsdinner.core.BusinessException;
 import org.hackthon.letsdinner.dao.MenuDayDao;
 import org.hackthon.letsdinner.dao.UserDao;
 import org.hackthon.letsdinner.model.AjaxObject;
+import org.hackthon.letsdinner.model.JsonResult;
+import org.hackthon.letsdinner.utils.BaseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +39,12 @@ public class TestController
         //userDao.registerUser("xxxxxx", "名字", "123456");
 //        userDao.validateUser("xxxxxx", "123456");
         System.out.println(menuDayDao.getDayMenu("2019-10-18", "D"));
+
+        String json = "{\"code\":0, \"message\":\"成功\",\"data\":[1,2,3]}";
+        JsonResult result = BaseUtils.parseJson(json);
+        System.out.println(result.getMessage());
+        JSONArray array = (JSONArray) result.getData();
+        System.out.println("大小" + array.size());
         model.addAttribute("message", param);
         return "index";
     }

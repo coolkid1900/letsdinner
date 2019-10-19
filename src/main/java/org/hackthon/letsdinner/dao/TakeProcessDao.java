@@ -26,7 +26,7 @@ public class TakeProcessDao
      * @param key 取餐标识
      * @return
      */
-    public String updateDishStatus(int id, String key)
+    public String updateDishStatus(String key, String status)
     {
         return BaseUtils.toResultJson(new Object());
     }

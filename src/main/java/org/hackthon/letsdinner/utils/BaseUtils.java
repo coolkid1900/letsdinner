@@ -1,7 +1,9 @@
 package org.hackthon.letsdinner.utils;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.httpclient.HttpStatus;
 import org.hackthon.letsdinner.model.AjaxObject;
+import org.hackthon.letsdinner.model.JsonResult;
 
 public class BaseUtils
 {
@@ -13,5 +15,10 @@ public class BaseUtils
         }
 
         return AjaxObject.ok(obj).toString();
+    }
+
+    public static JsonResult parseJson(String json)
+    {
+        return JSON.parseObject(json, JsonResult.class);
     }
 }
