@@ -1,22 +1,15 @@
 package org.hackthon.letsdinner.model;
 
-import com.alibaba.fastjson.annotation.JSONField;
-
-import java.util.List;
-
 /**
  * 每日菜表
  */
 public class MenuDay
 {
-    @JSONField(serialize = false)
     private String menuIds;
 
     private String currentDate;
 
     private String period;
-
-    private List<String> menuIdList;
 
     public String getMenuIds()
     {
@@ -48,14 +41,4 @@ public class MenuDay
         this.period = period;
     }
 
-    public List<String> getMenuIdList()
-    {
-
-        return menuIdList;
-    }
-
-    public void setMenuIdList(List<String> menuIdList)
-    {
-        this.menuIdList = menuIdList;
-    }
 }
