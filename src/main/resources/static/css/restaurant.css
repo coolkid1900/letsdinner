@@ -8,12 +8,12 @@
 }
 
 .headImg {
-    /*float:left;*/
+    float:left;
     background-image: url('../images/main.png');
     background-repeat: no-repeat;
-    background-size: 80px;
-    height: 80px;
-    width: 80px;
+    background-size: 50px;
+    height: 50px;
+    width: 50px;
     /*margin-bottom: 10px;
     margin-top: 10px;
     margin-left:5px;*/
