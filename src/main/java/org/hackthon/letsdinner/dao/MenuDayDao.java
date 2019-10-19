@@ -5,9 +5,12 @@ import org.hackthon.letsdinner.model.AjaxObject;
 import org.hackthon.letsdinner.model.MenuBase;
 import org.hackthon.letsdinner.model.MenuDay;
 import org.hackthon.letsdinner.utils.BaseUtils;
+import org.hackthon.letsdinner.utils.DataChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -30,15 +33,18 @@ public class MenuDayDao
     public String getDayMenu(String date, String period)
     {
         List<MenuBase> list = new ArrayList<>();
-        String sql1 = "select * from menu_day where current_date=? and period=?";
-        String sql2 = "select * from menu_base where id=?";
+        String sql1 = "select menu_ids,current_date,period from menu_day where current_date=? and period=?";
+        String sql2 = "select id,name,image,price from menu_base where id=?";
         try
         {
-            MenuDay menuDay = jdbcTemplate.queryForObject(sql1, new Object[]{date, period}, MenuDay.class);
+            List<MenuDay> menuDays = jdbcTemplate.query(sql1, new BeanPropertyRowMapper<>(MenuDay.class), date, period);
+            MenuDay menuDay = DataAccessUtils.uniqueResult(menuDays);
+            DataChecker.checkNull(menuDay);
             String[] menuIds = menuDay.getMenuIds().split(",");
             for (String id : menuIds)
             {
-                MenuBase base = jdbcTemplate.queryForObject(sql2, new Object[]{Integer.parseInt(id)}, MenuBase.class);
+                MenuBase base = jdbcTemplate.queryForObject(sql2, new Object[]{Integer.parseInt(id)}, new BeanPropertyRowMapper<>(MenuBase.class));
+                DataChecker.checkNull(base);
                 list.add(base);
             }
         }

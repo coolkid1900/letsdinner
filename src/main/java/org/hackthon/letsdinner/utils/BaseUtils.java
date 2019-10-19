@@ -21,4 +21,5 @@ public class BaseUtils
     {
         return JSON.parseObject(json, JsonResult.class);
     }
+
 }

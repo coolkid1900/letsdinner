@@ -3,7 +3,6 @@ package org.hackthon.letsdinner.dao;
 import com.google.common.hash.Hashing;
 import org.hackthon.letsdinner.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +22,11 @@ public class UserDao
     {
         password = Hashing.md5().hashBytes(password.getBytes()).toString();
         System.out.println(password);
-        String sql = "select * from user where id=?";
+        String sql = "select password from user where id=?";
 
-        User user = jdbcTemplate.queryForObject(sql, new Object[]{id}, new BeanPropertyRowMapper<>(User.class));
-        System.out.println(user.getName());
-        System.out.println(user.getPassword().equals(password));
+        String pwd = jdbcTemplate.queryForObject(sql, new Object[]{id}, String.class);
+        System.out.println(pwd);
+        System.out.println(pwd.equals(password));
         return true;
     }
 }

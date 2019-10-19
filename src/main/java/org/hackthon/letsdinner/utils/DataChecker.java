@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DataChecker
 {
-    public static void CheckDate(String date)
+    public static void checkDate(String date)
     {
         try
         {
@@ -19,11 +19,19 @@ public class DataChecker
         }
     }
 
-    public static void CheckPeriod(String period)
+    public static void checkPeriod(String period)
     {
         if (!"B".equals(period) && !"L".equals(period) && !"D".equals(period))
         {
             throw new BusinessException("无效的用餐时间段");
+        }
+    }
+
+    public static void checkNull(Object obj) throws Exception
+    {
+        if (null == obj)
+        {
+            throw new Exception("object is null");
         }
     }
 }
