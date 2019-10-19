@@ -1,28 +1,37 @@
 package org.hackthon.letsdinner.model;
 
 public class RestaurantFood {
-    private String imgUrl;//图片链接
-    private String foodName;//食物名称
+    private String image;//图片链接
+    private String name;//食物名称
+    private int count;//菜品数量
 
     public RestaurantFood() {
     }
 
-    public RestaurantFood(String imgUrl, String foodName) {
-        this.imgUrl = imgUrl;
-        this.foodName = foodName;
+    public RestaurantFood(String image, String name, int count) {
+        this.image = image;
+        this.name = name;
+        this.count = count;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public int getCount() {
+        return count;
     }
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    public String getFoodName() {
-        return foodName;
+    public String getImage() {
+        return image;
     }
-    public void setFoodName(String foodName) {
-        this.foodName = foodName;
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 }

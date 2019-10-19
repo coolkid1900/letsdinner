@@ -39,21 +39,26 @@
               for (var i = 0; i < data.length; i++) {
                    //选菜信息
                    var selectRestaurantFood = "";
-                   for(var j = 0; j < data[i].selectRestaurantFood.length; j++)
+                   for(var j = 0; j < data[i].menu.length; j++)
                    {
-                      if(j != data[i].selectRestaurantFood.length - 1)
+                      if(j != data[i].menu.length - 1)
                       {
-                          selectRestaurantFood += "<div style=\"display:inline-table;margin-right:15px;\"><img src=\"" + data[i].selectRestaurantFood[j].imgUrl + "\" style=\"width:45px;height:45px;margin-right:10px;\">（" + data[i].selectRestaurantFood[j].foodName + "）&nbsp ＋ </div>"
+                          selectRestaurantFood += "<div style=\"display:inline-table;margin-right:15px;\"><img src=\"data:image/jpg;base64," + data[i].menu[j].image + "\" style=\"width:100px;height:100px;margin-right:10px;\">（" + data[i].menu[j].name + " × " + data[i].menu[j].count + "）&nbsp ＋ </div>"
                       }
                       else
                       {
-                          selectRestaurantFood += "<div style=\"display:inline-table;margin-right:15px;\"><img src=\"" + data[i].selectRestaurantFood[j].imgUrl + "\" style=\"width:45px;height:45px;margin-right:10px;\">（" + data[i].selectRestaurantFood[j].foodName + "）</div>"
+                          selectRestaurantFood += "<div style=\"display:inline-table;margin-right:15px;\"><img src=\"data:image/jpg;base64," + data[i].menu[j].image + "\" style=\"width:100px;height:100px;margin-right:10px;\">（" + data[i].menu[j].name + " × " + data[i].menu[j].count + "）</div>"
                       }
                    }
                    //拼接表格的行和列
-                   str = "<tr><td>" + data[i].id + "</td><td>" + selectRestaurantFood + "</td></tr>";
+                   str = "<tr id = \"line_"  + data[i].id + "\"><td>" + data[i].id + "</td><td>" + selectRestaurantFood + "</td></tr>";
                    //追加到table中
                    $("#tab").append(str);
+                   if(tempInfo != "" && JSON.stringify(data[i]) != JSON.stringify(tempInfo[i]) && JSON.stringify(data[i]) != "")
+                   {
+                        $("#line_" + i).addClass("buLing");
+                        setTimeout(function(){ $("#line_" + i).removeClass("buLing");}, 10000);
+                   }
               }
           }
       }
@@ -62,12 +67,31 @@
       td, th {
           font-size: 16px;
       }
+@keyframes fade {
+    from {
+        background: -webkit-gradient(linear,0 0,100% 100%,from(#54B8F4),to(#5C78EB));
+        background: -moz-linear-gradient(left top,#54B8F4,#5C78EB);
+    }
+    50% {
+        background: #fff;
+        background: #fff;
+    }
+    to {
+        background: -webkit-gradient(linear,0 0,100% 100%,from(#54B8F4),to(#5C78EB));
+        background: -moz-linear-gradient(left top,#54B8F4,#5C78EB);
+    }
+}
+.buLing {
+    background: -webkit-gradient(linear,0 0,100% 100%,from(#54B8F4),to(#5C78EB));
+    background: -moz-linear-gradient(left top,#54B8F4,#5C78EB);
+    animation: fade 1200ms infinite;
+}
   </style>
 </head>
 
 <body style="padding-top:5px;" onload="InitPage()" >
 <div id="CurrentEater" style="margin-left:30px;margin-right:30px;">
-  <table border="1" cellspacing="0" width="100%">
+  <table border="1" cellspacing="0" width="100%" class="table-striped">
     <caption style="text-align:center;font-size:large;color:black">
       <div style="color:dodgerblue;"><img src="../images/main.png" style="width:80px;height:80px;margin-right:10px;">LetsDinner | 配餐</div>
     </caption>

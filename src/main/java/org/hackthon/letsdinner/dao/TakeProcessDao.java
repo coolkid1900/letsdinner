@@ -8,6 +8,7 @@ import org.hackthon.letsdinner.utils.BaseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -36,14 +37,15 @@ public class TakeProcessDao
             String status = jdbcTemplate.queryForObject(sql, new Object[]{key}, String.class);
             map.put("status", status);
         }
+        catch (EmptyResultDataAccessException exp)
+        {
+            // 查询列表为空
+            map.put("status", "D");
+        }
         catch (Exception exp)
         {
             logger.error("查询取餐状态失败. Exp: {}", exp.getMessage());
             return AjaxObject.error("查询取餐状态失败").toString();
-        }
-        if (map.size() == 0)
-        {
-            return AjaxObject.error(404, "查询记录为空").toString();
         }
         return BaseUtils.toResultJson(map);
     }
@@ -56,7 +58,7 @@ public class TakeProcessDao
      */
     public String updateDishStatus(String key, String status)
     {
-        String sql = "update take_process set status=? where key=?";
+        String sql = "update take_process set status=? where menu_key=?";
         try
         {
             jdbcTemplate.update(sql, status, key);
@@ -130,6 +132,7 @@ public class TakeProcessDao
         {
             int id = jdbcTemplate.queryForObject(sql1, new Object[]{}, Integer.class);
             jdbcTemplate.update(sql2, id);
+            map.put("id", id);
         }
         catch (Exception exp)
         {
@@ -139,6 +142,48 @@ public class TakeProcessDao
         if (map.size() == 0)
         {
             return AjaxObject.error(404, "查询记录为空").toString();
+        }
+        return BaseUtils.toResultJson(map);
+    }
+
+    public String takeOneDishOrSetStatus(String key, String status)
+    {
+        String sql1 = "select id from take_process where menu_key=?";
+        String sql2 = "select id from take_process where status<>'I' order by id limit 1";
+        String sql3 = "update take_process set status=? where menu_key=?";
+        String sql4 = "update take_process set status=?,menu_key=? where id=?";
+
+        Map<String, Object> map = new HashMap<>();
+        try
+        {
+            int id = jdbcTemplate.queryForObject(sql1, new Object[]{key}, Integer.class);
+            // 有记录，则设置状态
+            jdbcTemplate.update(sql3, status, key);
+            map.put("id", id);
+        }
+        catch (EmptyResultDataAccessException exp)
+        {
+            // 查询列表为空，写入数据库
+            try
+            {
+                int id = jdbcTemplate.queryForObject(sql2, new Object[]{}, Integer.class);
+                jdbcTemplate.update(sql4, status, key, id);
+                map.put("id", id);
+            }
+            catch (EmptyResultDataAccessException e)
+            {
+                return AjaxObject.error(404, "当前无空闲取餐码").toString();
+            }
+            catch (Exception e)
+            {
+                logger.error("获取取餐码失败#1. Exp: {}", e.getMessage());
+                return AjaxObject.error("查询取餐状态失败").toString();
+            }
+        }
+        catch (Exception exp)
+        {
+            logger.error("获取取餐码失败#2. Exp: {}", exp.getMessage());
+            return AjaxObject.error("获取取餐码失败").toString();
         }
         return BaseUtils.toResultJson(map);
     }
