@@ -14,25 +14,29 @@
 
 <div class="list-group">
   <div class="row list-group-item cap">
-    <div class="col-xs-3 col-sm-3">
+    <img src="../images/main_white.png" style="width: 80px; height: 80px; margin-right: 10px;" />
+    LetsDinner | 选餐
+    <!--<div class="col-xs-3 col-sm-3">
       <img src="../images/main.png" class="capImg" />
     </div>
     <div class="col-xs-9 col-sm-9 blu" >
       LetsDinner | 选餐
-    </div>
+    </div>-->
   </div>
 
   <input id="userID" type="hidden" th:value="${userID}" />
   <div class="row list-group-item" th:each="food : ${menu}">
 
-    <div class="col-xs-4 col-sm-4"><img th:src="${food.image}" class="capImg" /></div>
+    <div class="col-xs-4 col-sm-4" style="text-align: center;">
+      <img th:src="'data:image/jpeg;base64,' + ${food.image}" class="capImg" />
+    </div>
 
-    <div class="col-xs-5 col-sm-5" >
+    <div class="col-xs-4 col-sm-4" >
       <div hight="50%" th:text="${food.name}"></div>
       <div hight="50%" th:text="'￥' + ${food.price}"></div>
     </div>
 
-    <div class="col-xs-3 col-sm-3">
+    <div class="col-xs-4 col-sm-4">
       <span th:id="'minus' + ${food.id}" class="glyphicon glyphicon-minus-sign vMiddle gray" aria-hidden="true" th:onclick="delFood([[${food.id}]], [[${food.name}]], [[${food.price}]]);"></span>
         &nbsp;<span class="vMiddle" th:id="'num' + ${food.id}">0</span>&nbsp;
       <span class="glyphicon glyphicon-plus-sign vMiddle blu" aria-hidden="true" th:onclick="addFood([[${food.id}]], [[${food.name}]], [[${food.price}]]);"></span>
@@ -43,7 +47,7 @@
 </div>
 <div style="padding-bottom:50px"></div>
 <div class="footer">
-  <div class="status"><span>已选<span id="foodNum">0</span>个菜，共￥</span><span id="totalPrice">0</span></div>
+  <div class="status"><span>已选<span id="foodNum">0</span>个菜品，共￥</span><span id="totalPrice">0</span></div>
   <button type="button" class="comBtn" th:onclick="commitFood([[${date}]], [[${period}]])">选好了</button>
 </div>
 

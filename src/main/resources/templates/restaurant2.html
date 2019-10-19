@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>餐厅管理</title>
+</head>
+
+<body  onload="initPage();">
+<nav class="navbar navbar-default navbar-fixed-top" style='color:#2aabd2;' th:fragment="nav">
+    <div class="container">
+        <div class="navbar-header">
+            <img class="headImg"/>
+            <a class="navbar-brand"  >let's dinner|餐厅管理</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="nav navbar-nav">
+                <li><a  onclick='changeMenu("Y", 0, 0);'>菜谱</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">星期一菜谱<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a  onclick='changeMenu("N", 1, 1);'>早餐</a></li>
+                        <li><a  onclick='changeMenu("N", 1, 2);'>中餐</a></li>
+                        <li><a  onclick='changeMenu("N", 1, 3);'>晚餐</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">星期二菜谱<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a  onclick='changeMenu("N", 2, 1);'>早餐</a></li>
+                        <li><a  onclick='changeMenu("N", 2, 2);'>中餐</a></li>
+                        <li><a  onclick='changeMenu("N", 2, 3);'>晚餐</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">星期三菜谱<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a  onclick='changeMenu("N", 3, 1);'>早餐</a></li>
+                        <li><a  onclick='changeMenu("N", 3, 2);'>中餐</a></li>
+                        <li><a  onclick='changeMenu("N", 3, 3);'>晚餐</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">星期四菜谱<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a  onclick='changeMenu("N", 4, 1);'>早餐</a></li>
+                        <li><a  onclick='changeMenu("N", 4, 2);'>中餐</a></li>
+                        <li><a  onclick='changeMenu("N", 4, 3);'>晚餐</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">星期五菜谱<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a  onclick='changeMenu("N", 5, 1);'>早餐</a></li>
+                        <li><a  onclick='changeMenu("N", 5, 2);'>中餐</a></li>
+                        <li><a  onclick='changeMenu("N", 5, 3);'>晚餐</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">星期六菜谱<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a  onclick='changeMenu("N", 6, 1);'>早餐</a></li>
+                        <li><a  onclick='changeMenu("N", 6, 2);'>中餐</a></li>
+                        <li><a  onclick='changeMenu("N", 6, 3);'>晚餐</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">星期日菜谱<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a  onclick='changeMenu("N", 7, 1);'>早餐</a></li>
+                        <li><a  onclick='changeMenu("N", 7, 2);'>中餐</a></li>
+                        <li><a  onclick='changeMenu("N", 7, 3);'>晚餐</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="tableArea" id="cookArea" style="display:none; padding-top: 60px;">
+    <div style="padding-top: 20px; ">
+        <div style="font-size: 16px; color:#2aabd2"><span>菜谱导入</span></div>
+        <ul class="nav nav-list"><li class="divider" style="color: #2aabd2"></li></ul>
+        <form method="post" id="uploadForm" action="/letsdinner/upload" enctype="multipart/form-data" target="hideIframe">
+            <table cellpadding="2" cellspacing="2" border="0">
+                <tr>
+                    <td>菜品图片：&nbsp;&nbsp;</td><td><input type="file" id="file" name="file" /></td>
+                    <td>菜品名称：&nbsp;&nbsp;</td><td><input id="cookName" name="cookName" /></td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;菜品单价：&nbsp;&nbsp;</td><td><input id="cookPrice" name="cookPrice" /></td>
+                    <td></td><td><input type="submit" value="立刻上传" onclick="upload();" /></td>
+                </tr>
+            </table>
+        </form>
+        <iframe id="myIframe" name="hideIframe" style="display:none;"></iframe>
+    </div>
+    <div style="padding-top: 20px; ">
+        <div style="font-size: 16px; color:#2aabd2"><span>每日菜谱导入</span></div>
+        <ul class="nav nav-list"><li class="divider" style="color: #2aabd2"></li></ul>
+        <table cellpadding="2" cellspacing="2" border="0">
+            <tr>
+                <td>日期：&nbsp;&nbsp;</td>
+                <td>
+                    <select  id="dateWeek" class="form-control">
+                        <option>星期一</option>
+                        <option>星期二</option>
+                        <option>星期三</option>
+                        <option>星期四</option>
+                        <option>星期五</option>
+                        <option>星期六</option>
+                        <option>星期日</option>
+                    </select>
+                </td>
+                <td>&nbsp;&nbsp;用餐时间段：&nbsp;&nbsp;</td>
+                <td>
+                    <select id="timeDinner" class="form-control">
+                        <option>早餐</option>
+                        <option>中餐</option>
+                        <option>晚餐</option>
+                    </select>
+                </td>
+                <td>&nbsp;&nbsp;</td><td><button onclick="insertDayCook()">导入每日菜谱</button></td>
+            </tr>
+        </table>
+    </div>
+    <table id="cookbook" border="1">
+
+    </table>
+</div>
+
+
+
+<div class="tableArea" id="dayCookArea" style="display:none; padding-top: 60px;">
+    <table id="dayCookbook" border="1">
+
+    </table>
+</div>
+
+
+<script src="/js/jquery.min.js" charset="utf-8"></script>
+<script src="/js/bootstrap.min.js" charset="utf-8"></script>
+<script src="/js/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table-zh-CN.min.js"></script>
+<link rel="stylesheet" href="/css/bootstrap-table.min.css">
+<link rel="stylesheet" href="/css/restaurant.css">
+<script type="text/javascript">
+    function initPage()
+    {
+        changeMenu("Y", 0, 0);
+        //showCookBook();
+    }
+    function showCookBook()
+    {
+        $('#cookbook').bootstrapTable('destroy'); //先销毁表格
+        $('#cookbook').bootstrapTable({
+            url:'/letsdinner/showcookbook',
+            method:'post',
+            striped:true,
+            cache:false,
+            local:'zh-CN',
+            pageination:true,
+            sortOrder:"asc",
+            pageNmuber:1,
+            pageSize:10,
+            pageList:[10,25,50,100],
+            sidePagination:"server", //分页方式
+            search:false, //是否显示表格搜索，客户端搜索
+            strictSearch:true,
+            clickToSelect:false,
+            showRefresh:false,
+            //样式设置
+            height: 500,
+
+            columns:[
+                {
+                    checkbox:true,
+                    visble:true
+                },
+                {
+                    field: 'id',
+                    title: '编号',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'name',
+                    title: '名称',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'price',
+                    title: '单价',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    filed: 'image',
+                    title: '图片',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter:function(value,row,index)
+                    {
+                        return '<img src="data:image/jpg;base64,' + row.image + '" alt="" width="80px;" height="80px;"/>';
+                    }
+                },
+                {
+                    field: 'operator',
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    events: operateEvents,
+                    formatter: function(value,row,index)
+                    {
+                        return ['<button id="tabEdit" type="button" class="btn btn-default">编辑</button>'+'&nbsp'+
+                        '<button id="tabDelete" type="button" class="btn btn-default">删除</button>'].join();
+                    }
+                }
+            ]
+        });
+    }
+
+    window.operateEvents = {
+        "click #tabEdit": function(e, value,row,index)
+        {
+            alert("更新成功!");
+        },
+        "click #tabDelete": function(e, value,row,index)
+        {
+            var id = row.id;
+            var name = row.name;
+            $.ajax({
+                type: "post",  // 请求方式
+                url: "/letsdinner/deleteCookBook",  // 目标资源
+                data: 'id='+id,
+                success : function (data) {
+                    alert(name + "删除成功！");
+                    showCookBook();
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown){
+                    alert("删除失败!");
+                }
+            });
+        }
+    }
+
+    function insertDayCook()
+    {
+        //选择日期和用餐时间段
+        var dateWeek = $("#dateWeek").val();
+        var timeDinner = $("#timeDinner").val();
+
+        //选择菜谱表需要导入的菜品
+        var checklist = $('#cookbook').bootstrapTable('getAllSelections');
+        var idList = new Array();
+        for (var i = 0; i < checklist.length; i++) {
+            idList.push(checklist[i].id);
+        }
+
+        var reqjson = {
+            week: dateWeek,
+            timePeriod:timeDinner,
+            list:idList
+        };
+
+        $.ajax({
+            type: "post",  // 请求方式
+            url: "/letsdinner/insertDayCook",  // 目标资源
+            contentType:"application/json",
+            data: JSON.stringify(reqjson),
+            success : function (data) {
+                alert("每日菜谱导入成功！");
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown){
+                alert("每日菜谱导入失败!");
+            }
+        });
+    }
+
+    function changeMenu(isMainPage, weekIndex, timePeriod)
+    {
+        //显示主页
+        if(isMainPage == 'Y')
+        {
+            $("#dayCookArea").hide();
+            $("#cookArea").show();
+            showCookBook();
+        }
+        //显示每日菜谱
+        else
+        {
+            $("#cookArea").hide();
+            $("#dayCookArea").show();
+            showDayCookBook(weekIndex, timePeriod);
+        }
+    }
+
+    //得到查询的参数
+    function queryParams(weekIndex, timePeriod) {
+        var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+            // limit: params.limit,   //页面大小
+            //offset: params.offset,  //页码
+            //pageSize:this.pageSize,
+            //pageNumber:this.pageNumber,
+            week: weekIndex,
+            time:timePeriod
+        };
+        return temp;
+    }
+
+    function showDayCookBook(weekIndex, timePeriod)
+    {
+        alert(weekIndex+""+timePeriod);
+        var params = queryParams(weekIndex, timePeriod);
+        $('#dayCookbook').bootstrapTable('destroy'); //先销毁表格
+        $('#dayCookbook').bootstrapTable({
+            url:'/letsdinner/showDayCookBook',
+            queryParams:params,
+            method:'post',
+            striped:true,
+            cache:false,
+            local:'zh-CN',
+            pageination:true,
+            sortOrder:"asc",
+            pageNmuber:1,
+            pageSize:10,
+            pageList:[10,25,50,100],
+            sidePagination:"server", //分页方式
+            search:false, //是否显示表格搜索，客户端搜索
+            strictSearch:true,
+            clickToSelect:false,
+            showRefresh:false,
+            //样式设置
+            height: 500,
+
+            columns:[
+                {
+                    field: 'id',
+                    title: '编号',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'name',
+                    title: '名称',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'price',
+                    title: '单价',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    filed: 'image',
+                    title: '图片',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter:function(value,row,index)
+                    {
+                        return '<img src="data:image/jpg;base64,' + row.image + '" alt="" width="80px;" height="80px;"/>';
+                    }
+                }
+            ]
+        });
+    }
+
+    function upload()
+    {
+        var reqjson = {
+            file: $("#file").val(),
+            cookName:$("#cookName").val(),
+            cookPrice:$("#cookPrice").val()
+        };
+        $.ajax({
+            type: "post",  // 请求方式
+            url: "/letsdinner/upload",  // 目标资源
+            contentType:"multipart/form-data",
+            data: JSON.stringify(reqjson),
+            success : function (data) {
+                alert("菜谱导入成功！");
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown){
+                alert("菜谱导入失败!");
+            }
+        });
+    }
+
+    // ajax + jQuery上传
+    function UploadFile() {
+        var file = $("#file")[0].files[0];
+        var form = new FormData();
+        form.append('myfile', file);
+        form.append("cookName", $("#cookName").val());
+        form.append("cookPrice", $("#cookPrice").val());
+        $.ajax({
+            type: 'POST',
+            url: '/upload2/',
+            data: form,
+            processData: false,  // 告诉jquery不转换数据
+            contentType: false,  // 告诉jquery不设置内容格式
+
+            success : function (data) {
+                alert("菜谱导入成功！");
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown){
+                alert("菜谱导入失败!");
+            }
+        });
+    }
+
+    function resubmit()
+    {
+        return alert("上传成功！");
+    }
+
+</script>
+
+</body>
+
+</html>

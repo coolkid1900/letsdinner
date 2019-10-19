@@ -54,7 +54,7 @@ public class UserMenuController {
         // 获取时间段失败
         if (mealTime == null)
         {
-            return "error";
+            return "errorMobile";
         }
         // 根据日期和用餐类型获取菜品信息
         String foodListStr = mdd.getDayMenu(date, mealTime);
@@ -96,7 +96,7 @@ public class UserMenuController {
             }
         }
         else {
-            return "error";
+            return "errorMobile";
         }
 
         model.addAttribute("menu", menu);
