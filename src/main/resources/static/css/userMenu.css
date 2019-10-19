@@ -1,6 +1,3 @@
-.everyRow {
-}
-
 .cap {
     text-align:center;
     font-size:large;
@@ -17,12 +14,11 @@
     color: rgb(18,150,219);
 }
 
-.btnDel {
-    vertical-align: middle;
-    vertical-align: -webkit-baseline-middle;
+.gray {
+    color: gray;
 }
 
-.btnAdd {
+.vMiddle {
     vertical-align: middle;
     vertical-align: -webkit-baseline-middle;
 }
@@ -30,7 +26,7 @@
 .footer {
     position: fixed;
     left: 0px;
-    bottom: 0px;
+    bottom: 30px;
     width: 100%;
     height: 50px;
     background-color: #fff;
@@ -75,4 +71,5 @@
 
 .swal-modal {
     margin-right: 1.3rem;
+    width: 75%;
 }

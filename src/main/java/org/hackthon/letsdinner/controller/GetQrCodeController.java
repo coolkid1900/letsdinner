@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class GetQrCodeController {
@@ -34,18 +33,11 @@ public class GetQrCodeController {
     @RequestMapping("/getqrcode")
     public String getqrcode(HttpServletRequest request, Model model)
     {
-        HttpSession session = request.getSession();
-        String uid = (String)session.getAttribute("userid");
-        String qrcodeUrl = getUrl() + "/scanqrcode?key=" + getOrderKeyByUserId(uid);
-        String websocketUrl = getWebsocketUrl() + "/websocket/"+getOrderKeyByUserId(uid);
+        String key = request.getParameter("key");
+        String qrcodeUrl = getUrl() + "/scanqrcode?key=" + key;
+        String websocketUrl = getWebsocketUrl() + "/websocket/" + key;
         model.addAttribute("qrcodeUrl", qrcodeUrl);
         model.addAttribute("websocketUrl",websocketUrl);
         return "getQrMainPage";
-    }
-
-    private String getOrderKeyByUserId(String uid) {
-        String key;
-        key="12";
-        return key;
     }
 }

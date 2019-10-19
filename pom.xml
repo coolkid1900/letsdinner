@@ -104,12 +104,6 @@
 			<artifactId>guava</artifactId>
 			<version>28.0-jre</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.62</version>
-		</dependency>
 	</dependencies>
 
 	<build>
