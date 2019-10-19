@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -77,14 +78,14 @@ public class TakeProcessDao
      */
     public String getAllMenu()
     {
-        String sql1 = "select id,uid,menu_ids,a.menu_key as menu_key,current_date,period from take_process a,menu_one b " +
-                "where a.menu_key = b.menu_key";
-        String sql2 = "select * from menu_base where id=?";
+        String sql1 = "select id,uid,menu_ids,a.menu_key as menu_key,today_date,period from take_process a,menu_one b " +
+                "where a.menu_key = b.menu_key and status='I'";
+        String sql2 = "select id,name,image,price from menu_base where id=?";
 
         List<Map<String, Object>> list = new ArrayList<>();
         try
         {
-            List<MenuOne> menuOnes = jdbcTemplate.queryForList(sql1, new Object[]{}, MenuOne.class);
+            List<MenuOne> menuOnes = jdbcTemplate.query(sql1, new Object[]{}, new BeanPropertyRowMapper<>(MenuOne.class));
             for (MenuOne one : menuOnes)
             {
                 Map<String, Object> map = new HashMap<>();
@@ -96,7 +97,7 @@ public class TakeProcessDao
                 {
                     String sid = menuId.substring(0, menuId.indexOf('='));
                     String scnt = menuId.substring(menuId.indexOf('=') + 1);
-                    MenuBase base = jdbcTemplate.queryForObject(sql2, new Object[]{Integer.parseInt(sid)}, MenuBase.class);
+                    MenuBase base = jdbcTemplate.queryForObject(sql2, new Object[]{Integer.parseInt(sid)}, new BeanPropertyRowMapper<>(MenuBase.class));
                     Dish dish = new Dish();
                     dish.setName(base.getName());
                     dish.setImage(base.getImage());
