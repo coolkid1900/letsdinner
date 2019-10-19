@@ -22,8 +22,8 @@ public class TakeProcessDao
 
     /**
      * 设置取餐状态
-     * @param id 取餐码
      * @param key 取餐标识
+     * @param status 取餐状态
      * @return
      */
     public String updateDishStatus(String key, String status)

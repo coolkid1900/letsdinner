@@ -66,11 +66,10 @@
         //将消息显示在网页上
         function setMessageInnerHTML(message){
             try{
-                if (message.substr(0,1) === "B"){
-                    $("#qrcodeTips").text("请向取餐出口出示");
-                    $("#message").text("取餐号:"+message.substr(1,1));
-                }else if (message.substr(0,1) === "C"){
-                    $("#message").text("请用餐");
+                var pushMessage = JSON.parse(message);
+                $("#message").text(pushMessage["message"]);
+                if (pushMessage["status"] === "I"){
+                    $("#qrcodeTips").text("请向取餐入口出示");
                 }
             }catch (e) {
                 alert("出错啦");
