@@ -1,7 +1,10 @@
 package org.hackthon.letsdinner.controller;
 
 import org.hackthon.letsdinner.core.BusinessException;
+import org.hackthon.letsdinner.dao.MenuDayDao;
+import org.hackthon.letsdinner.dao.UserDao;
 import org.hackthon.letsdinner.model.AjaxObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +18,10 @@ import java.util.Map;
 @RequestMapping("/test")
 public class TestController
 {
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private MenuDayDao menuDayDao;
     /**
      * 请求页面成功示例
      * @param request 请求数据对象
@@ -26,6 +33,9 @@ public class TestController
     {
         //注释
         String param = request.getParameter("param");
+        //userDao.registerUser("xxxxxx", "名字", "123456");
+//        userDao.validateUser("xxxxxx", "123456");
+        System.out.println(menuDayDao.getDayMenu("2019-10-18", "D"));
         model.addAttribute("message", param);
         return "index";
     }
