@@ -1,5 +1,8 @@
 package org.hackthon.letsdinner.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.hackthon.letsdinner.model.AjaxObject;
 import org.hackthon.letsdinner.model.cookBean;
 import org.hackthon.letsdinner.utils.ImageUtil;
@@ -7,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,11 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.FileSystemNotFoundException;
 import java.util.*;
 
 @Controller
-@RequestMapping("/Restaurant")
+@RequestMapping("/letsdinner")
 public class RestaurantController {
 
     private final ResourceLoader resourceLoader;
@@ -35,46 +40,11 @@ public class RestaurantController {
      * @param model 返回页面模型
      * @return 返回的页面名称，去除.html后缀
      */
-    @RequestMapping("/uploadPage")
-    public String uploadPage(HttpServletRequest request, Model model)
+    @RequestMapping("/restaurant")
+    public String Restaurant(HttpServletRequest request, Model model)
     {
-        return "restaurant";
-    }
-
-    @RequestMapping("/upload")
-    public String upload(HttpServletRequest request, @RequestParam("file")MultipartFile file, Model model) throws IOException {
-        try
-        {
-            //根据时间戳创建新的文件名
-            String fileName = System.currentTimeMillis() + file.getOriginalFilename();
-            //拼接文件名
-            //String desFileName = request.getServletContext().getRealPath("") + "upLoaded"
-                   // + File.separator + fileName;
-            //String desFileName = LetsdinnerApplication.class.getResource("/static/image/") + "upLoaded"
-                    //+ File.separator + fileName;
-            String desFileName = "C:/letsdinner/letsdinner/target/classes/static/images/upLoaded"
-                    + File.separator + fileName;
-            File destFile = new File(desFileName);
-            if(!destFile.exists())
-            {
-                destFile.getParentFile().mkdirs();
-            }
-            file.transferTo(destFile);
-            model.addAttribute("fileName", fileName);
-        }
-        catch(FileSystemNotFoundException e)
-        {
-            e.printStackTrace();
-            return "上传失败，" + e.getMessage();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-            return "上传失败，" + e.getMessage();
-        }
-
-
-        return "上传成功";
+        return "restaurant2";
+        //return "nav";
     }
 
 
@@ -107,15 +77,84 @@ public class RestaurantController {
      * }
      */
     @ResponseBody
-    @RequestMapping("/show")
-    public AjaxObject ajax(HttpServletRequest request, Model model)
+    @RequestMapping("/upload")
+    public AjaxObject upload(HttpServletRequest request, @RequestParam("file")MultipartFile file, Model model)
     {
-        Map<String, Object> map = new HashMap<>();
-        File file= new File("file:C:/letsdinner/letsdinner/target/classes/static/images/upLoaded/1571229707528bcs.jpg");
-        //string imagePath = resourceLoader.getResource("file:" + "C:/letsdinner/letsdinner/target/classes/static/image/upLoaded/1571229707528bcs.jpg");
-        String imgPath = file.getAbsolutePath();
-        map.put("imagePath", imgPath);
-        return AjaxObject.ok(map);
+        try{
+            Map<String, Object> map = new HashMap<>();
+            //菜名
+            String strCookName = request.getParameter("cookName");
+            //单价
+            String strCookPrice = request.getParameter("cookPrice");
+            //图片转换为base64
+            InputStream ins = file.getInputStream();
+
+            String base64Img = ImageUtil.image2Base64byinputStream(ins);
+            //导入菜谱表
+            //...todo
+
+            return AjaxObject.ok("上传成功");
+        }
+        catch(Exception e)
+        {
+            return AjaxObject.error("上传失败");
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping("/upload2")
+    public AjaxObject upload2(@RequestBody String json, Model model)
+    {
+        try{
+            JSONObject jsonObject = JSON.parseObject(json);
+            //获取数据
+            String strCookName = jsonObject.getString("cookName");
+            String strCookPrice = jsonObject.getString("cookPrice");
+            JSONObject fileObject = jsonObject.getJSONObject("file");
+            MultipartFile file = (MultipartFile)fileObject;
+            //图片转换为base64
+            InputStream ins = file.getInputStream();
+
+            String base64Img = ImageUtil.image2Base64byinputStream(ins);
+            //导入菜谱表
+            //...todo
+
+            return AjaxObject.ok("上传成功");
+        }
+        catch(Exception e)
+        {
+            return AjaxObject.error("上传失败");
+        }
+    }
+
+    /**
+     *
+     * @param json
+     * @param model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/insertDayCook")
+    public AjaxObject ajax(@RequestBody String json, Model model)
+    {
+        try
+        {
+            JSONObject jsonObject = JSON.parseObject(json);
+            //JSONObject jsonObject1 = JSONObject.parseObject(COMPLEX_JSON_STR);//因为JSONObject继承了JSON，所以这样也是可以的
+
+            //获取日期，用餐时间段，菜谱id
+            String strWeek = jsonObject.getString("week");
+            String strTimePeriod = jsonObject.getString("timePeriod");
+            JSONArray idList = jsonObject.getJSONArray("list");
+            //调用接口插入每日菜谱
+
+
+            return AjaxObject.ok("插入成功！");
+        }
+        catch(Exception e)
+        {
+            return AjaxObject.error("插入失败！");
+        }
     }
 
     @ResponseBody
@@ -127,7 +166,7 @@ public class RestaurantController {
         cook1.id="1";
         cook1.name="红烧肉";
         cook1.price="12.00";
-        String testFileName="C:/letsdinner/letsdinner/target/classes/static/images/cookery-book/bcs.jpg";
+        String testFileName="C:/letsdinner/src/main/resources/static/images/cookery-book/bcs.jpg";
 
         String result= ImageUtil.image2Base64(testFileName);
         cook1.image=result;
@@ -140,9 +179,72 @@ public class RestaurantController {
         cookList.add(cook1);
         cookList.add(cook2);
 
+        //获取当前完整菜谱
+        //todo...
+
+
         map.put("total", 2);
         map.put("rows", cookList);
         return map;
+    }
+
+    @ResponseBody
+    @RequestMapping("/showDayCookBook")
+    public Map<String, Object> getDayCookBook(@RequestBody String json, Model model)
+    {
+        Map<String, Object> map1 = new HashMap<>();
+        try
+        {
+            JSONObject jsonObject = JSON.parseObject(json);
+            //获取日期，用餐时间段
+            String strWeek = jsonObject.getString("week");
+            String strTimePeriod = jsonObject.getString("time");
+
+            cookBean cook1=new cookBean();
+            cook1.id="1";
+            cook1.name="红烧肉";
+            cook1.price="12.00";
+            String testFileName="C:/letsdinner/src/main/resources/static/images/cookery-book/bcs.jpg";
+
+            String result= ImageUtil.image2Base64(testFileName);
+            cook1.image=result;
+            cookBean cook2=new cookBean();
+            cook2.id="2";
+            cook2.name="红烧肉2";
+            cook2.price="13.00";
+            cook2.image=result;
+            List<cookBean> cookList = new ArrayList<cookBean>();
+            cookList.add(cook1);
+            cookList.add(cook2);
+
+            //获取当前完整菜谱
+            //todo...
+
+
+            map1.put("total", 2);
+            map1.put("rows", cookList);
+            return map1;
+        }
+        catch(Exception e)
+        {
+            return map1;
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping("/deleteCookBook")
+    public AjaxObject deletCookBook(HttpServletRequest request, Model model)
+    {
+        try{
+            String id = request.getParameter("id");
+            //删除当前菜品
+            //todo...
+            return AjaxObject.ok("删除成功！");
+        }
+        catch(Exception e)
+        {
+            return AjaxObject.error("删除失败！");
+        }
     }
 
 }

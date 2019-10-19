@@ -9,26 +9,28 @@
     <title>餐厅管理</title>
 </head>
 
-<body  onload="InitPage();">
+<body  onload="initPage();">
 <!--<div th:replace="nav::nav"></div>-->
 <div id="headArea" align="center">
     <div class="headImg"></div>
     <div class="headText"><span>let's dinner|餐厅管理</span></div>
 </div>
 
+<div class="menu"></div>
 <div>
     <table>
         <tr>
-            <td onclick="ShowcookArea();">菜谱</td>
-            <td onclick="ShowdayCookArea();">每日菜谱</td>
+            <td onclick="ShowcookArea();" style="font-size: 20px; color: #2aabd2" th:border="2" th:cellpadding="1" data-th-cellspacing="1">菜谱</td>
+            <td onclick="ShowdayCookArea();" style="font-size: 20px; color: #2aabd2" th:border="2" th:cellpadding="1" data-th-cellspacing="1">每日菜谱</td>
         </tr>
     </table>
 </div>
 
 <div class="tableArea" id="cookArea" style="">
-    <div>
-        <form method="post" id="uploadForm" action="/Restaurant/upload" enctype="multipart/form-data">
-            <table cellpadding="0" cellspacing="0" border="0">
+    <div style="padding-top: 20px; ">
+        <div style="font-size: 16px; color:#2aabd2"><span>菜谱导入</span></div>
+        <form method="post" id="uploadForm" action="/letsdinner/upload" enctype="multipart/form-data">
+            <table cellpadding="2" cellspacing="2" border="0">
             <tr>
                 <td>菜品图片：</td><td><input type="file" id="file" name="file" /></td>
                 <td>菜品名称：</td><td><input id="cookName" name="cookName" /></td>
@@ -37,6 +39,34 @@
             </tr>
             </table>
         </form>
+    </div>
+    <div style="padding-top: 20px; ">
+        <div style="font-size: 16px; color:#2aabd2"><span>每日菜谱导入</span></div>
+        <table cellpadding="2" cellspacing="2" border="0">
+            <tr>
+                <td>日期：</td>
+                <td>
+                    <select  id="dateWeek" class="form-control">
+                        <option>星期一</option>
+                        <option>星期二</option>
+                        <option>星期三</option>
+                        <option>星期四</option>
+                        <option>星期五</option>
+                        <option>星期六</option>
+                        <option>星期日</option>
+                    </select>
+                </td>
+                <td>用餐时间段：</td>
+                <td>
+                    <select id="timeDinner" class="form-control">
+                        <option>早餐</option>
+                        <option>中餐</option>
+                        <option>晚餐</option>
+                    </select>
+                </td>
+                <td></td><td><button onclick="insertDayCook()">导入每日菜谱</button></td>
+            </tr>
+        </table>
     </div>
     <table id="cookbook" border="1">
 
@@ -66,11 +96,15 @@
 <link rel="stylesheet" href="/css/bootstrap-table.min.css">
 <link rel="stylesheet" href="/css/restaurant.css">
 <script type="text/javascript">
-    function InitPage()
+    function initPage()
+    {
+        showCookBook();
+    }
+    function showCookBook()
     {
         $('#cookbook').bootstrapTable('destroy'); //先销毁表格
         $('#cookbook').bootstrapTable({
-            url:'/Restaurant/showcookbook',
+            url:'/letsdinner/showcookbook',
             method:'post',
             striped:true,
             cache:false,
@@ -89,6 +123,10 @@
             height: 500,
 
             columns:[
+                {
+                    checkbox:true,
+                    visble:true
+                },
                 {
                     field: 'id',
                     title: '编号',
@@ -116,25 +154,45 @@
                     {
                         return '<img src="data:image/jpg;base64,' + row.image + '" alt="" width="80px;" height="80px;"/>';
                     }
+                },
+                {
+                    field: 'operator',
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    events: operateEvents,
+                    formatter: function(value,row,index)
+                    {
+                        return ['<button id="tabEdit" type="button" class="btn btn-default">编辑</button>'+'&nbsp'+
+                            '<button id="tabDelete" type="button" class="btn btn-default">删除</button>'].join();
+                    }
                 }
             ]
         });
     }
-    function show()
-    {
-        $.ajax({
-            type: "get",  // 请求方式
-            url: "/Restaurant/show",  // 目标资源
-            dataType: "json",  // 服务器响应的数据类型
-            success : function (data) {
-                alert(data.imagePath);
-                $("#testImg").src = data.imagePath;
-                $("#testImg").show();
-            },
-            error : function(XMLHttpRequest, textStatus, errorThrown){
-                alert(textStatus);
-            }
-        });
+
+    window.operateEvents = {
+        "click #tabEdit": function(e, value,row,index)
+        {
+            alert("更新成功!");
+        },
+        "click #tabDelete": function(e, value,row,index)
+        {
+            var id = row.id;
+            var name = row.name;
+            $.ajax({
+                type: "post",  // 请求方式
+                url: "/letsdinner/deleteCookBook",  // 目标资源
+                data: 'id='+id,
+                success : function (data) {
+                    alert(name + "删除成功！");
+                    showCookBook();
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown){
+                    alert("删除失败!");
+                }
+            });
+        }
     }
 
     function ShowcookArea()
@@ -154,6 +212,41 @@
         }
         $("#cookArea").hide();
     }
+
+    function insertDayCook()
+    {
+        //选择日期和用餐时间段
+        var dateWeek = $("#dateWeek").val();
+        var timeDinner = $("#timeDinner").val();
+
+        //选择菜谱表需要导入的菜品
+        var checklist = $('#cookbook').bootstrapTable('getAllSelections');
+        var idList = new Array();
+        for (var i = 0; i < checklist.length; i++) {
+            idList.push(checklist[i].id);
+        }
+
+        var reqjson = {
+            week: dateWeek,
+            timePeriod:timeDinner,
+            list:idList
+        };
+
+        $.ajax({
+            type: "post",  // 请求方式
+            url: "/letsdinner/insertDayCook",  // 目标资源
+            contentType:"application/json",
+            data: JSON.stringify(reqjson),
+            success : function (data) {
+                alert("每日菜谱导入成功！");
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown){
+                alert("每日菜谱导入失败!");
+            }
+        });
+    }
+
+
 </script>
 
 </body>
