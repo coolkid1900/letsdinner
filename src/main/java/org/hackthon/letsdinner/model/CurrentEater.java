@@ -1,14 +1,15 @@
 package org.hackthon.letsdinner.model;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class CurrentEater {
+public class CurrentEater implements Serializable {
     private int id;//取餐号
-    private ArrayList<RestaurantFood> selectRestaurantFood;//用餐者所选食物
+    private ArrayList<RestaurantFood> menu;//用餐者所选食物
 
-    public CurrentEater(int id, ArrayList<RestaurantFood> selectRestaurantFood) {
+    public CurrentEater(int id, ArrayList<RestaurantFood> menu) {
         this.id = id;
-        this.selectRestaurantFood = selectRestaurantFood;
+        this.menu = menu;
     }
 
     public CurrentEater() {
@@ -21,10 +22,10 @@ public class CurrentEater {
         this.id = id;
     }
 
-    public ArrayList<RestaurantFood> getSelectRestaurantFood() {
-        return selectRestaurantFood;
+    public ArrayList<RestaurantFood> getMenu() {
+        return menu;
     }
-    public void setSelectRestaurantFood(ArrayList<RestaurantFood> selectRestaurantFood) {
-        this.selectRestaurantFood = selectRestaurantFood;
+    public void setMenu(ArrayList<RestaurantFood> menu) {
+        this.menu = menu;
     }
 }

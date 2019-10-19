@@ -39,15 +39,15 @@
               for (var i = 0; i < data.length; i++) {
                    //选菜信息
                    var selectRestaurantFood = "";
-                   for(var j = 0; j < data[i].selectRestaurantFood.length; j++)
+                   for(var j = 0; j < data[i].menu.length; j++)
                    {
-                      if(j != data[i].selectRestaurantFood.length - 1)
+                      if(j != data[i].menu.length - 1)
                       {
-                          selectRestaurantFood += "<div style=\"display:inline-table;margin-right:15px;\"><img src=\"" + data[i].selectRestaurantFood[j].imgUrl + "\" style=\"width:45px;height:45px;margin-right:10px;\">（" + data[i].selectRestaurantFood[j].foodName + "）&nbsp ＋ </div>"
+                          selectRestaurantFood += "<div style=\"display:inline-table;margin-right:15px;\"><img src=\"data:image/jpg;base64," + data[i].menu[j].image + "\" style=\"width:100px;height:100px;margin-right:10px;\">（" + data[i].menu[j].name + " × " + data[i].menu[j].count + "）&nbsp ＋ </div>"
                       }
                       else
                       {
-                          selectRestaurantFood += "<div style=\"display:inline-table;margin-right:15px;\"><img src=\"" + data[i].selectRestaurantFood[j].imgUrl + "\" style=\"width:45px;height:45px;margin-right:10px;\">（" + data[i].selectRestaurantFood[j].foodName + "）</div>"
+                          selectRestaurantFood += "<div style=\"display:inline-table;margin-right:15px;\"><img src=\"data:image/jpg;base64," + data[i].menu[j].image + "\" style=\"width:100px;height:100px;margin-right:10px;\">（" + data[i].menu[j].name + " × " + data[i].menu[j].count + "）</div>"
                       }
                    }
                    //拼接表格的行和列
@@ -67,7 +67,7 @@
 
 <body style="padding-top:5px;" onload="InitPage()" >
 <div id="CurrentEater" style="margin-left:30px;margin-right:30px;">
-  <table border="1" cellspacing="0" width="100%">
+  <table border="1" cellspacing="0" width="100%" class="table table-bordered">
     <caption style="text-align:center;font-size:large;color:black">
       <div style="color:dodgerblue;"><img src="../images/main.png" style="width:80px;height:80px;margin-right:10px;">LetsDinner | 配餐</div>
     </caption>
