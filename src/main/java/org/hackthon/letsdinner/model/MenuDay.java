@@ -7,7 +7,7 @@ public class MenuDay
 {
     private String menuIds;
 
-    private String currentDate;
+    private String todayDate;
 
     private String period;
 
@@ -21,14 +21,14 @@ public class MenuDay
         this.menuIds = menuIds;
     }
 
-    public String getCurrentDate()
+    public String getTodayDate()
     {
-        return currentDate;
+        return todayDate;
     }
 
-    public void setCurrentDate(String currentDate)
+    public void setTodayDate(String todayDate)
     {
-        this.currentDate = currentDate;
+        this.todayDate = todayDate;
     }
 
     public String getPeriod()

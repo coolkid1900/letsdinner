@@ -3,8 +3,13 @@ package org.hackthon.letsdinner.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.hackthon.letsdinner.dao.MenuBaseDao;
+import org.hackthon.letsdinner.dao.MenuDayDao;
 import org.hackthon.letsdinner.model.AjaxObject;
+import org.hackthon.letsdinner.model.JsonResult;
+import org.hackthon.letsdinner.model.MenuBase;
 import org.hackthon.letsdinner.model.cookBean;
+import org.hackthon.letsdinner.utils.BaseUtils;
 import org.hackthon.letsdinner.utils.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
@@ -20,12 +25,20 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.file.FileSystemNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
 @RequestMapping("/letsdinner")
 public class RestaurantController {
+
+    @Autowired
+    private MenuBaseDao menuBaseDao;
+    @Autowired
+    private MenuDayDao menuDayDao;
 
     private final ResourceLoader resourceLoader;
 
@@ -92,7 +105,7 @@ public class RestaurantController {
             String base64Img = ImageUtil.image2Base64byinputStream(ins);
             //导入菜谱表
             //...todo
-
+            menuBaseDao.addDishToMenu(strCookName, new BigDecimal(strCookPrice), base64Img);
             return AjaxObject.ok("上传成功");
         }
         catch(Exception e)
@@ -145,9 +158,14 @@ public class RestaurantController {
             //获取日期，用餐时间段，菜谱id
             String strWeek = jsonObject.getString("week");
             String strTimePeriod = jsonObject.getString("timePeriod");
-            JSONArray idList = jsonObject.getJSONArray("list");
-            //调用接口插入每日菜谱
+            int weekDay = Integer.parseInt(strWeek);
 
+            LocalDate today = LocalDate.now();
+            int diff = weekDay - today.getDayOfWeek().getValue();
+
+            List<Integer> idList = jsonObject.getJSONArray("list").toJavaList(Integer.class);
+            //调用接口插入每日菜谱
+            menuDayDao.addDayMenu(today.plusDays(diff).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), strTimePeriod, idList);
 
             return AjaxObject.ok("插入成功！");
         }
@@ -162,29 +180,11 @@ public class RestaurantController {
     public Map<String, Object> getCookBook()
     {
         Map<String, Object> map=new HashMap<>();
-        cookBean cook1=new cookBean();
-        cook1.id="1";
-        cook1.name="红烧肉";
-        cook1.price="12.00";
-        String testFileName="C:/letsdinner/src/main/resources/static/images/cookery-book/bcs.jpg";
-
-        String result= ImageUtil.image2Base64(testFileName);
-        cook1.image=result;
-        cookBean cook2=new cookBean();
-        cook2.id="2";
-        cook2.name="红烧肉2";
-        cook2.price="13.00";
-        cook2.image=result;
-        List<cookBean> cookList = new ArrayList<cookBean>();
-        cookList.add(cook1);
-        cookList.add(cook2);
-
-        //获取当前完整菜谱
-        //todo...
-
-
-        map.put("total", 2);
-        map.put("rows", cookList);
+//        JSONObject jsonObject = JSON.parseObject(menuBaseDao.getAllMenu());
+        JsonResult result = BaseUtils.parseJson(menuBaseDao.getAllMenu());
+        JSONArray array = (JSONArray) result.getData();
+        map.put("total", array.size());
+        map.put("rows", array);
         return map;
     }
 
@@ -198,31 +198,21 @@ public class RestaurantController {
             JSONObject jsonObject = JSON.parseObject(json);
             //获取日期，用餐时间段
             String strWeek = jsonObject.getString("week");
+
+            int weekDay = Integer.parseInt(strWeek);
+
+            LocalDate today = LocalDate.now();
+            int diff = weekDay - today.getDayOfWeek().getValue();
+
             String strTimePeriod = jsonObject.getString("time");
-
-            cookBean cook1=new cookBean();
-            cook1.id="1";
-            cook1.name="红烧肉";
-            cook1.price="12.00";
-            String testFileName="C:/letsdinner/src/main/resources/static/images/cookery-book/bcs.jpg";
-
-            String result= ImageUtil.image2Base64(testFileName);
-            cook1.image=result;
-            cookBean cook2=new cookBean();
-            cook2.id="2";
-            cook2.name="红烧肉2";
-            cook2.price="13.00";
-            cook2.image=result;
-            List<cookBean> cookList = new ArrayList<cookBean>();
-            cookList.add(cook1);
-            cookList.add(cook2);
 
             //获取当前完整菜谱
             //todo...
+            JsonResult result = BaseUtils.parseJson(menuDayDao.getDayMenu(today.plusDays(diff).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), strTimePeriod));
+            JSONArray array = (JSONArray) result.getData();
 
-
-            map1.put("total", 2);
-            map1.put("rows", cookList);
+            map1.put("total", array.size());
+            map1.put("rows", array);
             return map1;
         }
         catch(Exception e)

@@ -1,17 +1,23 @@
 package org.hackthon.letsdinner.dao;
 
 import org.hackthon.letsdinner.model.AjaxObject;
+import org.hackthon.letsdinner.model.MenuBase;
+import org.hackthon.letsdinner.model.MenuDay;
 import org.hackthon.letsdinner.utils.BaseUtils;
+import org.hackthon.letsdinner.utils.DataChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -73,5 +79,21 @@ public class MenuBaseDao
             return AjaxObject.error("增加菜品失败").toString();
         }
         return BaseUtils.toResultJson(new Object());
+    }
+
+    public String getAllMenu()
+    {
+        List<MenuBase> menuDays;
+        String sql1 = "select * from menu_base";
+        try
+        {
+            menuDays = jdbcTemplate.query(sql1, new Object[]{}, new BeanPropertyRowMapper<>(MenuBase.class));
+        }
+        catch (Exception exp)
+        {
+            logger.error("查询菜单表失败. Exp: {}", exp.getMessage());
+            return AjaxObject.error("查询菜单表失败").toString();
+        }
+        return BaseUtils.toResultJson(menuDays);
     }
 }
