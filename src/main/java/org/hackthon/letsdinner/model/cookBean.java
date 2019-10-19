@@ -1,6 +1,6 @@
 package org.hackthon.letsdinner.model;
 
-class cookBean
+public class cookBean
 {
     public String id;
     public String name;
