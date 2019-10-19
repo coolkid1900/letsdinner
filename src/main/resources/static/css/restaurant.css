@@ -1,0 +1,32 @@
+.headArea {
+    position: absolute;
+    left:50%;
+    transform: translateX(-50%);
+    -webkit-transform :translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform:translateX(-50%);
+}
+
+.headImg {
+    /*float:left;*/
+    background-image: url('../images/main.png');
+    background-repeat: no-repeat;
+    background-size: 80px;
+    height: 80px;
+    width: 80px;
+    /*margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left:5px;*/
+}
+
+.headText{
+    /*margin-left: 200px;*/
+    font-size: 20px;
+    color: #2aabd2;
+    height: 80px;
+}
+
+.tableArea {
+    /*margin-left: 100px;
+    margin-right: 100px;*/
+}

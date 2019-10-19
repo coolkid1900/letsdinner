@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>餐厅管理</title>
+</head>
+
+<body  onload="InitPage();">
+<!--<div th:replace="nav::nav"></div>-->
+<div id="headArea" align="center">
+    <div class="headImg"></div>
+    <div class="headText"><span>let's dinner|餐厅管理</span></div>
+</div>
+
+<div>
+    <table>
+        <tr>
+            <td onclick="ShowcookArea();">菜谱</td>
+            <td onclick="ShowdayCookArea();">每日菜谱</td>
+        </tr>
+    </table>
+</div>
+
+<div class="tableArea" id="cookArea" style="">
+    <div>
+        <form method="post" id="uploadForm" action="/Restaurant/upload" enctype="multipart/form-data">
+            <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td>菜品图片：</td><td><input type="file" id="file" name="file" /></td>
+                <td>菜品名称：</td><td><input id="cookName" name="cookName" /></td>
+                <td>菜品单价：</td><td><input id="cookPrice" name="cookPrice" /></td>
+                <td></td><td><input type="submit" value="立刻上传" /></td>
+            </tr>
+            </table>
+        </form>
+    </div>
+    <table id="cookbook" border="1">
+
+    </table>
+</div>
+
+
+
+<div class="tableArea" id="dayCookArea" style="display:none">
+    <table id="dayCookbook" border="1">
+
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js" charset="utf-8"></script>
+<script src="/js/bootstrap.min.js" charset="utf-8"></script>
+<script src="/js/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table-zh-CN.min.js"></script>
+<link rel="stylesheet" href="/css/bootstrap-table.min.css">
+<link rel="stylesheet" href="/css/restaurant.css">
+<script type="text/javascript">
+    function InitPage()
+    {
+        $('#cookbook').bootstrapTable('destroy'); //先销毁表格
+        $('#cookbook').bootstrapTable({
+            url:'/Restaurant/showcookbook',
+            method:'post',
+            striped:true,
+            cache:false,
+            local:'zh-CN',
+            pageination:true,
+            sortOrder:"asc",
+            pageNmuber:1,
+            pageSize:10,
+            pageList:[10,25,50,100],
+            sidePagination:"server", //分页方式
+            search:false, //是否显示表格搜索，客户端搜索
+            strictSearch:true,
+            clickToSelect:false,
+            showRefresh:false,
+            //样式设置
+            height: 500,
+
+            columns:[
+                {
+                    field: 'id',
+                    title: '编号',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'name',
+                    title: '名称',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'price',
+                    title: '单价',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    filed: 'image',
+                    title: '图片',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter:function(value,row,index)
+                    {
+                        return '<img src="data:image/jpg;base64,' + row.image + '" alt="" width="80px;" height="80px;"/>';
+                    }
+                }
+            ]
+        });
+    }
+    function show()
+    {
+        $.ajax({
+            type: "get",  // 请求方式
+            url: "/Restaurant/show",  // 目标资源
+            dataType: "json",  // 服务器响应的数据类型
+            success : function (data) {
+                alert(data.imagePath);
+                $("#testImg").src = data.imagePath;
+                $("#testImg").show();
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown){
+                alert(textStatus);
+            }
+        });
+    }
+
+    function ShowcookArea()
+    {
+        if($("#cookArea").css('display')  == 'none')
+        {
+            $("#cookArea").show();
+        }
+        $("#dayCookArea").hide();
+    }
+
+    function ShowdayCookArea()
+    {
+        if($("#dayCookArea").css('display')  == 'none')
+        {
+            $("#dayCookArea").show();
+        }
+        $("#cookArea").hide();
+    }
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/userMenu.css">
+  <title>请选菜</title>
+</head>
+
+<body>
+
+<div class="list-group">
+  <div class="list-group-item">
+    <caption class="cap">
+      <div class="blu">
+        <img src="../images/main.png" class="capImg" />
+        LetsDinner | 配餐
+      </div>
+    </caption>
+  </div>
+
+  <input id="userID" type="hidden" th:value="${userID}" />
+  <div class="row list-group-item everyRow" th:each="food : ${menu}">
+
+    <div class="col-xs-4 col-sm-4"><img src="../images/1.jpg" class="capImg" /></div>
+
+    <div class="col-xs-6 col-sm-6" >
+      <div hight="50%" th:text="${food.foodName}"></div>
+      <div hight="50%" th:text="'￥' + ${food.price}"></div>
+    </div>
+
+    <div class="col-xs-2 col-sm-2">
+      <span class="glyphicon glyphicon-minus-sign btnDel blu" aria-hidden="true" th:onclick="delFood([[${food.foodId}]], [[${food.foodName}]], [[${food.price}]]);"></span>
+      <span class="glyphicon glyphicon-plus-sign btnAdd blu" aria-hidden="true" th:onclick="addFood([[${food.foodId}]], [[${food.foodName}]], [[${food.price}]]);"></span>
+    </div>
+
+  </div>
+
+</div>
+<div style="padding-bottom:50px"></div>
+<div class="footer">
+  <div class="status"><span>已选<span id="foodNum">0</span>个菜，共￥</span><span id="totalPrice">0</span></div>
+  <button type="button" class="comBtn" onclick="commitFood()">选好了</button>
+</div>
+
+<script src="/js/jquery.min.js" charset="utf-8"></script>
+<script src="/js/bootstrap.min.js" charset="utf-8"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
+  // 全局变量
+  // 用户选择菜单种类、价格
+  var foodNum = 0, totalPrice = 0;
+  var foodMap1 = {};  // 存储foodId、foodName
+  var foodMap2 = {};  // 存储foodId、num
+
+  // 加菜
+  function addFood(foodId, foodName, price)
+  {
+    foodMap1[foodId] = foodName;
+    // 计算菜的数量
+    if (foodMap2[foodId] !== undefined && foodMap2[foodId] > 0)
+    {
+      foodMap2[foodId]++;
+    }
+    else
+    {
+      foodMap2[foodId] = 1;
+      foodNum++;
+    }
+    totalPrice += price;
+    $("#foodNum").html(foodNum);
+    $("#totalPrice").html(totalPrice);
+  }
+
+  // 减菜
+  function delFood(foodId, foodName, price)
+  {
+    // 计算菜的数量
+    if (foodMap2[foodId] > 0)
+    {
+      foodMap2[foodId]--;
+      if (foodMap2[foodId] === 0 && foodNum > 0)
+      {
+        foodNum--;
+      }
+      totalPrice -= price;
+      $("#foodNum").html(foodNum);
+      $("#totalPrice").html(totalPrice);
+    }
+    else
+    {
+      swal({
+        text: "您前并未选择此菜!",
+      });
+      return;
+    }
+  }
+
+  function commitFood()
+  {
+    var tipStr = "";
+    var params = [];
+    for(var key in foodMap2)
+    {
+      var valueNum = foodMap2[key];
+      if (valueNum > 0)
+      {
+        tipStr += "\n" + foodMap1[key] + ": " + valueNum + "份";
+        params.push({"key":key,"num":valueNum});
+      }
+    }
+    if (tipStr === "")
+    {
+      swal({
+        text: "您尚未选择任何菜!",
+      });
+      return;
+    }
+
+    tipStr = "您已选择如下菜品：\n" + tipStr;
+
+    var userID = $("#userID").val();
+    var sendStr = "sendJson={'userID':'" + userID + "','foodJson':'" + JSON.stringify(params) + "'}";
+    swal(tipStr, {
+      buttons: {
+        cancel: "取消",
+        catch: {
+          text: "确认",
+          value: "commit",
+        },
+      },
+    })
+    .then((value) => {
+      switch (value) {
+        case "commit":
+          $.ajax({
+            type: "POST",
+            url: "/userCommit",
+            dataType: "json",
+            data: sendStr,
+            async: false,
+            success: function (result) {
+                swal({
+                  text: "即将生成二维码！",
+                });
+                window.location.href="/getqrcode?userID=" + result.uniqueID;
+            }, error: function () {
+                swal({
+                  text: "服务器异常！",
+                });
+            }
+          });
+          break;
+      }
+    });
+  }
+</script>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <title>配餐展示平台</title>
+  <script src="/js/jquery.min.js" charset="utf-8"></script>
+  <script src="/js/bootstrap.min.js" charset="utf-8"></script>
+  <script>
+      var tempInfo = "";//当前数据暂存
+      function InitPage(){
+          sendInfoByAjax();
+      }
+      function sendInfoByAjax(){
+          $.ajax({
+            type: "post",  // 请求方式
+            url: "/show/queryCurrentUsers",  // 目标资源
+            dataType: "json",  // 服务器响应的数据类型
+            success : function (data) {
+                showData(data);
+                tempInfo = data;//将当前数据暂存
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown){
+                alert(textStatus);
+              }
+          });
+          //每1秒钟刷新一下
+          setTimeout("sendInfoByAjax()",1000);
+      }
+      //展示数据
+      function showData(data) {
+          //数据有变化时，则更新列表,数据无变化时则不更新数据
+          if(JSON.stringify(data) != JSON.stringify(tempInfo))
+          {
+              $("#tab").empty();
+              var str = "";//定义用于拼接的字符串
+              for (var i = 0; i < data.length; i++) {
+                   //选菜信息
+                   var selectRestaurantFood = "";
+                   for(var j = 0; j < data[i].selectRestaurantFood.length; j++)
+                   {
+                      if(j != data[i].selectRestaurantFood.length - 1)
+                      {
+                          selectRestaurantFood += "<div style=\"display:inline-table;margin-right:15px;\"><img src=\"" + data[i].selectRestaurantFood[j].imgUrl + "\" style=\"width:45px;height:45px;margin-right:10px;\">（" + data[i].selectRestaurantFood[j].foodName + "）&nbsp ＋ </div>"
+                      }
+                      else
+                      {
+                          selectRestaurantFood += "<div style=\"display:inline-table;margin-right:15px;\"><img src=\"" + data[i].selectRestaurantFood[j].imgUrl + "\" style=\"width:45px;height:45px;margin-right:10px;\">（" + data[i].selectRestaurantFood[j].foodName + "）</div>"
+                      }
+                   }
+                   //拼接表格的行和列
+                   str = "<tr><td>" + data[i].id + "</td><td>" + selectRestaurantFood + "</td></tr>";
+                   //追加到table中
+                   $("#tab").append(str);
+              }
+          }
+      }
+  </script>
+  <style>
+      td, th {
+          font-size: 16px;
+      }
+  </style>
+</head>
+
+<body style="padding-top:5px;" onload="InitPage()" >
+<div id="CurrentEater" style="margin-left:30px;margin-right:30px;">
+  <table border="1" cellspacing="0" width="100%">
+    <caption style="text-align:center;font-size:large;color:black">
+      <div style="color:dodgerblue;"><img src="../images/main.png" style="width:80px;height:80px;margin-right:10px;">LetsDinner | 配餐</div>
+    </caption>
+    <thead>
+    <tr>
+      <th style="text-align:center;padding-top:5px;padding-bottom:5px;">取餐号</th>
+      <th style="text-align:center;padding-top:5px;padding-bottom:5px;">待取餐信息</th>
+    </tr>
+    </thead>
+    <tbody id="tab" style="text-align:center">
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

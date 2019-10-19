@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class GetQrCodeController {
@@ -17,8 +18,12 @@ public class GetQrCodeController {
     @Autowired
     private ServerConfig serverConfig;
 
-    public String getUrl() {
+    private String getUrl() {
         return  serverConfig.getUrl();
+    }
+
+    private String getWebsocketUrl() {
+        return  serverConfig.getWebsocketUrl();
     }
     /**
      * 请求页面成功示例
@@ -29,11 +34,18 @@ public class GetQrCodeController {
     @RequestMapping("/getqrcode")
     public String getqrcode(HttpServletRequest request, Model model)
     {
-        String key = "12";
-        String uid = "80234530";
-        String qrcodeUrl = getUrl() + "/scanqrcode?key=" + key;
+        HttpSession session = request.getSession();
+        String uid = (String)session.getAttribute("userid");
+        String qrcodeUrl = getUrl() + "/scanqrcode?key=" + getOrderKeyByUserId(uid);
+        String websocketUrl = getWebsocketUrl() + "/websocket/"+getOrderKeyByUserId(uid);
         model.addAttribute("qrcodeUrl", qrcodeUrl);
-        model.addAttribute("uid",uid);
+        model.addAttribute("websocketUrl",websocketUrl);
         return "getQrMainPage";
+    }
+
+    private String getOrderKeyByUserId(String uid) {
+        String key;
+        key="12";
+        return key;
     }
 }
