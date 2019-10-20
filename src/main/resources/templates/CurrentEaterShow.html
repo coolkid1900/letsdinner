@@ -56,11 +56,18 @@
                    $("#tab").append(str);
                    if(tempInfo != "" && JSON.stringify(data[i]) != JSON.stringify(tempInfo[i]) && JSON.stringify(data[i]) != "")
                    {
-                        $("#line_" + i).addClass("buLing");
-                        setTimeout(function(){ $("#line_" + i).removeClass("buLing");}, 10000);
+                        var strId = data[i].id
+                        $("#line_" + strId).addClass("buLing");
+                        setTimeout("delayShutDown(" + strId + ")", 10000);
                    }
               }
           }
+      }
+
+      //闪烁十秒退出
+      function delayShutDown(str)
+      {
+          $("#line_" + str).removeClass("buLing");
       }
   </script>
   <style>
