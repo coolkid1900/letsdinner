@@ -11,10 +11,9 @@
     <link rel="stylesheet" href="/css/qrcode.css">
 </head>
 <body class="qrcodeMain">
-<!--    <div class="qrcodeTitle">取餐码</div>-->
     <div class="qrcodeTitle">
         <img src="/images/main_white.png" style="width:80px;height:80px;margin-right:10px;">
-        <span>LetsDinner | 配餐</span>
+        <span>LetsDinner |  取餐码</span>
     </div>
     <div class="qrcodeFieldDiv">
         <div id="qrcodeTips" class="qrcodeTips">请向取餐入口出示</div>
@@ -73,7 +72,7 @@
                 var pushMessage = JSON.parse(message);
                 $("#message").text(pushMessage["message"]);
                 if (pushMessage["status"] === "I"){
-                    $("#qrcodeTips").text("请向取餐入口出示");
+                    $("#qrcodeTips").text("请向取餐出口出示");
                 }
             }catch (e) {
                 alert("出错啦");

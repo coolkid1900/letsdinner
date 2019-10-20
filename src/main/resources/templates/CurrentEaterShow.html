@@ -56,11 +56,18 @@
                    $("#tab").append(str);
                    if(tempInfo != "" && JSON.stringify(data[i]) != JSON.stringify(tempInfo[i]) && JSON.stringify(data[i]) != "")
                    {
-                        $("#line_" + i).addClass("buLing");
-                        setTimeout(function(){ $("#line_" + i).removeClass("buLing");}, 10000);
+                        var strId = data[i].id
+                        $("#line_" + strId).addClass("buLing");
+                        setTimeout("delayShutDown(" + strId + ")", 10000);
                    }
               }
           }
+      }
+
+      //闪烁十秒退出
+      function delayShutDown(str)
+      {
+          $("#line_" + str).removeClass("buLing");
       }
   </script>
   <style>
@@ -69,16 +76,13 @@
       }
 @keyframes fade {
     from {
-        background: -webkit-gradient(linear,0 0,100% 100%,from(#54B8F4),to(#5C78EB));
-        background: -moz-linear-gradient(left top,#54B8F4,#5C78EB);
+        background: #1296db;
     }
     50% {
         background: #fff;
-        background: #fff;
     }
     to {
-        background: -webkit-gradient(linear,0 0,100% 100%,from(#54B8F4),to(#5C78EB));
-        background: -moz-linear-gradient(left top,#54B8F4,#5C78EB);
+        background: #1296db;
     }
 }
 .buLing {
@@ -92,13 +96,13 @@
 <body style="padding-top:5px;" onload="InitPage()" >
 <div id="CurrentEater" style="margin-left:30px;margin-right:30px;">
   <table border="1" cellspacing="0" width="100%" class="table-striped">
-    <caption style="text-align:center;font-size:large;color:black">
-      <div style="color:dodgerblue;"><img src="../images/main.png" style="width:80px;height:80px;margin-right:10px;">Let'sDinner | 配餐</div>
+    <caption style="text-align:center;font-size:large;color:black;background-color: #1296db;">
+      <div style="color:#fff;"><img src="../images/main_white.png" style="width:80px;height:80px;margin-right:10px;">Let'sDinner | 配餐</div>
     </caption>
     <thead>
     <tr>
-      <th style="text-align:center;padding-top:5px;padding-bottom:5px;">取餐号</th>
-      <th style="text-align:center;padding-top:5px;padding-bottom:5px;">待取餐信息</th>
+      <th style="text-align:center;padding-top:8px;padding-bottom:8px;">取餐号</th>
+      <th style="text-align:center;padding-top:8px;padding-bottom:8px;">待取餐信息</th>
     </tr>
     </thead>
     <tbody id="tab" style="text-align:center">
