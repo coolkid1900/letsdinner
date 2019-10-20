@@ -9,6 +9,7 @@ import org.hackthon.letsdinner.utils.DataChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -92,11 +93,17 @@ public class MenuDayDao
      */
     public String updateDayMenu(String date, String period, List<Integer> menuIds)
     {
-        String sql = "update menu_day set menu_ids=? where date=? and period=?";
+        String sql1 = "select menu_ids from menu_day where today_date=? and period=?";
+        String sql2 = "update menu_day set menu_ids=? where today_date=? and period=?";
         try
         {
+            jdbcTemplate.queryForObject(sql1, new Object[]{date, period}, String.class);
             String ids = Joiner.on(',').join(menuIds);
-            jdbcTemplate.update(sql, ids, date, period);
+            jdbcTemplate.update(sql2, ids, date, period);
+        }
+        catch (EmptyResultDataAccessException exp)
+        {
+            return addDayMenu(date, period, menuIds);
         }
         catch (Exception exp)
         {

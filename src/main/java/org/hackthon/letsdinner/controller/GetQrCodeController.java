@@ -18,11 +18,11 @@ public class GetQrCodeController {
     private ServerConfig serverConfig;
 
     private String getUrl() {
-        return  serverConfig.getUrl();
+        return  serverConfig.getHttpUrl();
     }
 
     private String getWebsocketUrl() {
-        return  serverConfig.getWebsocketUrl();
+        return  serverConfig.getWsUrl();
     }
     /**
      * 请求页面成功示例

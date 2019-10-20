@@ -9,7 +9,7 @@ spring:
       additional-paths:
         - src/main/java
   datasource:
-    url: jdbc:sqlite:///Users/lin/IdeaProjects/letsdinner/dinner.db
+    url: jdbc:sqlite://c:/letsdinner/dinner.db
     username:
     password:
     driver-class-name: org.sqlite.JDBC
@@ -17,3 +17,6 @@ server:
   port: 8080
 logging:
   config: classpath:log4j2.xml
+app:
+  httpUrl: http://127.0.0.1:8080
+  wsUrl: ws://127.0.0.1:8080

@@ -124,7 +124,7 @@ public class RestaurantController {
 
             List<Integer> idList = jsonObject.getJSONArray("list").toJavaList(Integer.class);
             //调用接口插入每日菜谱
-            menuDayDao.addDayMenu(today.plusDays(diff).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), strTimePeriod, idList);
+            menuDayDao.updateDayMenu(today.plusDays(diff).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), strTimePeriod, idList);
 
             return AjaxObject.ok("插入成功！");
         }

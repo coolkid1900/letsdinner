@@ -7,6 +7,7 @@ import org.hackthon.letsdinner.dao.MenuDayDao;
 import org.hackthon.letsdinner.dao.MenuOneDao;
 import org.hackthon.letsdinner.model.FoodBean;
 import org.hackthon.letsdinner.model.SelectBean;
+import org.hackthon.letsdinner.utils.BaseUtils;
 import org.hackthon.letsdinner.utils.PeriodUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,10 @@ public class UserMenuController {
         String userID = "";
         if (request.getParameterMap().get("userID") != null) {
             userID = request.getParameterMap().get("userID")[0];
+        }
+        else
+        {
+            userID = BaseUtils.generatorString(20);
         }
         //菜品信息初始化
         ArrayList menu = new ArrayList();

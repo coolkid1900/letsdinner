@@ -9,7 +9,7 @@
         <!--当输出到文件中的时候使用LOG_HOME替代输出到的文件夹,类似于配置java环境的时候的JAVA_HOME的做法-->
         <!--最好是填写相对路径,基路径是当前项目也就是src的上一级别-->
         <!--如果写成testlog/mylog,即使没有testlog,也会在src同级目录下新建出testlog文件夹以及其下的mylog文件夹-->
-        <property name="LOG_HOME">log</property>
+        <property name="LOG_HOME">c:/letsdinner/log</property>
     </properties>
 
     <!--翻译：附加器,记录方式-->

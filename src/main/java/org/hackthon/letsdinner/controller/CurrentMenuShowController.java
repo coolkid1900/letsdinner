@@ -37,11 +37,20 @@ public class CurrentMenuShowController {
             //接口调用，查询当前取餐列表，getAllMenu
             String menuInfo = TakeProcessDao.getAllMenu();
             JsonResult jsonResult = BaseUtils.parseJson(menuInfo);
-            JSON json = jsonResult.getData();
-            //测试代码
-            ArrayList<CurrentEater> currentEaterTest = (ArrayList)JSON.parseArray(json.toJSONString(),CurrentEater.class);
-            //JavaBean对象转字符串
-            String data = JSONArray.toJSON(currentEaterTest).toString();
+            String data = "";
+
+            if (jsonResult.getCode() == 0)
+            {
+                JSON json = jsonResult.getData();
+                //测试代码
+                ArrayList<CurrentEater> currentEaterTest = (ArrayList)JSON.parseArray(json.toJSONString(),CurrentEater.class);
+                //JavaBean对象转字符串
+                data = JSONArray.toJSON(currentEaterTest).toString();
+            }
+            else if (jsonResult.getCode() == 404)
+            {
+                data = "{}";
+            }
 
             //设置编码，防止乱码
             resp.setCharacterEncoding("utf-8");
