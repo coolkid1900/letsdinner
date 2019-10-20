@@ -202,5 +202,28 @@ public class RestaurantController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping("/deleteDayCookBook")
+    public AjaxObject deletDayCookBook(HttpServletRequest request, Model model)
+    {
+        try{
+            String id = request.getParameter("id");
+            //删除当前菜品
+            //todo...
+            int i_id = Integer.parseInt(id);
+            ArrayList idArray = new ArrayList();
+            idArray.add(i_id);
+            List<Integer> idList = (List<Integer>)idArray;
+            //调用接口插入每日菜谱
+            menuBaseDao.deleteFromMenu(idList);
+            return AjaxObject.ok("删除成功！");
+        }
+        catch(Exception e)
+        {
+            return AjaxObject.error("删除失败！");
+        }
+    }
+
+
 }
 
