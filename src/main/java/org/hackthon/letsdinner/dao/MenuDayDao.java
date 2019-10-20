@@ -33,7 +33,7 @@ public class MenuDayDao
     public String getDayMenu(String date, String period)
     {
         List<MenuBase> list = new ArrayList<>();
-        String sql1 = "select menu_ids,current_date,period from menu_day where current_date=? and period=?";
+        String sql1 = "select menu_ids,today_date,period from menu_day where today_date=? and period=?";
         String sql2 = "select id,name,image,price from menu_base where id=?";
         try
         {
@@ -69,7 +69,7 @@ public class MenuDayDao
      */
     public String addDayMenu(String date, String period, List<Integer> menuIds)
     {
-        String sql = "insert into menu_day(menu_ids, current_date, period) values(?,?,?)";
+        String sql = "insert into menu_day(menu_ids, today_date, period) values(?,?,?)";
         try
         {
             String ids = Joiner.on(',').join(menuIds);

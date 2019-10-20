@@ -40,18 +40,17 @@ public class ScanQrCodeController {
         PushMessage pushMessage = new PushMessage();
 
         if (getOrderStatusByKey(key).equals(STATUS_DEFAULT)){
-            if (setOrderStatus(key,STATUS_IN)){
-                int orderNum = getValidOrderNumByKey(key);
-                if (orderNum != -1){
-                    pushMessage.setStatus(STATUS_IN);
-                    pushMessage.setMessage("取餐号:"+orderNum);
-                }else {
-                    pushMessage.setStatus(STATUS_WAIT);
-                    pushMessage.setMessage("请稍后!");
-                }
+            int orderNum = setStatusAndGetOderNum(key,STATUS_IN);
+            if (orderNum != -1){
+                pushMessage.setStatus(STATUS_IN);
+                pushMessage.setMessage("取餐号:"+orderNum);
+            }else {
+                pushMessage.setStatus(STATUS_WAIT);
+                pushMessage.setMessage("请稍后!");
             }
         } else if(getOrderStatusByKey(key).equals(STATUS_IN)){
-            if (setOrderStatus(key,STATUS_OUT)){
+            int orderNum = setStatusAndGetOderNum(key,STATUS_OUT);
+            if(orderNum!=-1){
                 pushMessage.setStatus(STATUS_OUT);
                 pushMessage.setMessage("请用餐~");
             }
@@ -99,5 +98,19 @@ public class ScanQrCodeController {
             setStatus = true;
         }
         return setStatus;
+    }
+
+    private int setStatusAndGetOderNum(String key, String status) {
+        JsonResult jsonResult = BaseUtils.parseJson(takeProcessDao.takeOneDishOrSetStatus(key,status));
+        String orderNumJson = "";
+        if (jsonResult.getCode() == 0){
+            orderNumJson = jsonResult.getData().toJSONString();
+        }
+        else if (jsonResult.getCode() == 404)
+        {
+            return -1;
+        }
+        OrderNum orderNum = JSON.parseObject(orderNumJson, OrderNum.class);
+        return orderNum.getId();
     }
 }
