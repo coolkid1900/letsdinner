@@ -72,7 +72,7 @@
                 var pushMessage = JSON.parse(message);
                 $("#message").text(pushMessage["message"]);
                 if (pushMessage["status"] === "I"){
-                    $("#qrcodeTips").text("请向取餐入口出示");
+                    $("#qrcodeTips").text("请向取餐出口出示");
                 }
             }catch (e) {
                 alert("出错啦");
