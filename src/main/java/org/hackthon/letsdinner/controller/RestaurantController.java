@@ -60,21 +60,6 @@ public class RestaurantController {
         //return "nav";
     }
 
-
-    /*@RequestMapping("/show")
-    public String showImgList(String imgPath, Model model)
-    {
-        try {
-            //测试直接将图片地址给前端展示
-            model.addAttribute("imgPath", "C:/letsdinner/letsdinner/target/classes/static/images/upLoaded/1571229707528bcs.jpg");
-            return "show";
-        }
-        catch(Exception e)
-        {
-            return "error";
-        }
-    }*/
-
     /**
      * ajax请求json成功示例，需要添加两个注解@ResponseBody和@RequestMapping
      * @param request 请求数据对象
@@ -106,32 +91,6 @@ public class RestaurantController {
             //导入菜谱表
             //...todo
             menuBaseDao.addDishToMenu(strCookName, new BigDecimal(strCookPrice), base64Img);
-            return AjaxObject.ok("上传成功");
-        }
-        catch(Exception e)
-        {
-            return AjaxObject.error("上传失败");
-        }
-    }
-
-    @ResponseBody
-    @RequestMapping("/upload2")
-    public AjaxObject upload2(@RequestBody String json, Model model)
-    {
-        try{
-            JSONObject jsonObject = JSON.parseObject(json);
-            //获取数据
-            String strCookName = jsonObject.getString("cookName");
-            String strCookPrice = jsonObject.getString("cookPrice");
-            JSONObject fileObject = jsonObject.getJSONObject("file");
-            MultipartFile file = (MultipartFile)fileObject;
-            //图片转换为base64
-            InputStream ins = file.getInputStream();
-
-            String base64Img = ImageUtil.image2Base64byinputStream(ins);
-            //导入菜谱表
-            //...todo
-
             return AjaxObject.ok("上传成功");
         }
         catch(Exception e)
@@ -229,6 +188,12 @@ public class RestaurantController {
             String id = request.getParameter("id");
             //删除当前菜品
             //todo...
+            int i_id = Integer.parseInt(id);
+            ArrayList idArray = new ArrayList();
+            idArray.add(i_id);
+            List<Integer> idList = (List<Integer>)idArray;
+            //调用接口插入每日菜谱
+            menuBaseDao.deleteFromMenu(idList);
             return AjaxObject.ok("删除成功！");
         }
         catch(Exception e)
