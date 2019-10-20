@@ -149,6 +149,7 @@
     </div>
     <br>
     <br>
+    <div class="headText2" align="center"><span>菜谱</span></div>
     <table id="cookbook" border="1">
 
     </table>
@@ -158,6 +159,7 @@
 
 <div class="container">
 <div class="tableArea" id="dayCookArea" style="display:none; padding-top: 60px;">
+    <div class="headText2" id="dayTableName" align="center"></div>
     <table id="dayCookbook" border="1">
 
     </table>
@@ -317,8 +319,37 @@
         else
         {
             $("#cookArea").hide();
+            var strweek= switchWeek(weekIndex)+ switchTime(timePeriod);
+            //$("#dayTableName").text(strweek);
+            document.getElementById("dayTableName").innerText = strweek + '菜谱';
             $("#dayCookArea").show();
             showDayCookBook(weekIndex, timePeriod);
+        }
+    }
+
+    function switchWeek(weekIndex)
+    {
+        switch (weekIndex)
+        {
+            case 1: return '星期一';
+            case 2: return '星期二';
+            case 3: return '星期三';
+            case 4: return '星期四';
+            case 5: return '星期五';
+            case 6: return '星期六';
+            case 7: return '星期日';
+            default: return '';
+        }
+    }
+
+    function switchTime(weekIndex)
+    {
+        switch (weekIndex)
+        {
+            case 'B': return '早餐';
+            case 'L': return '中餐';
+            case 'D': return '晚餐';
+            default: return '';
         }
     }
 

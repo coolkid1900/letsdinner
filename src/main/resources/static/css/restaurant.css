@@ -20,10 +20,17 @@
 }
 
 .headText{
+     /*margin-left: 200px;*/
+     font-size: 20px;
+     color: #2aabd2;
+     height: 80px;
+ }
+
+.headText2{
     /*margin-left: 200px;*/
     font-size: 20px;
     color: #2aabd2;
-    height: 80px;
+    height: 50px;
 }
 
 .tableArea {
